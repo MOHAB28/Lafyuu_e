@@ -8,6 +8,11 @@ import 'features/login/data/repositories/login_repo_impl.dart';
 import 'features/login/domain/repositories/login_repo.dart';
 import 'features/login/domain/usecases/login_usecase.dart';
 import 'features/login/presentation/bloc/login_bloc.dart';
+import 'features/register/data/datasources/register_remote_data_sources.dart';
+import 'features/register/data/repositories/register_repo_impl.dart';
+import 'features/register/domain/repositories/register_repo.dart';
+import 'features/register/domain/usecases/register_usecase.dart';
+import 'features/register/presentation/bloc/register_bloc.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -16,18 +21,28 @@ Future<void> initAppModule() async {
   sl.registerFactory(
     () => LoginBloc(sl()),
   );
+  sl.registerFactory(
+    () => RegisterBloc(sl()),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => LoginUsecase(sl()));
+  sl.registerLazySingleton(() => RegisterUsecase(sl()));
 
   // Repository
   sl.registerLazySingleton<LoginRepo>(
     () => LoginRepoImpl(sl(), sl()),
   );
+  sl.registerLazySingleton<RegisterRepo>(
+    () => RegisterRepoImpl(sl(), sl()),
+  );
 
   // Data sources
   sl.registerLazySingleton<LoginRemoteDataSources>(
     () => LoginRemoteDataSourcesImpl(sl()),
+  );
+  sl.registerLazySingleton<RegisterRemoteDataSources>(
+    () => RegisterRemoteDataSourcesImpl(sl()),
   );
 
   //! Core
