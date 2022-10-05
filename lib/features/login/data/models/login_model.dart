@@ -16,9 +16,8 @@ class AuthModel extends AuthEntity {
     return AuthModel(
       status: json['status'],
       message: json['message'] ?? '',
-      authDataModel: json['data'] != null
-          ? AuthDataModel.fromJson(json['data'])
-          : null,
+      authDataModel:
+          json['data'] != null ? AuthDataModel.fromJson(json['data']) : null,
     );
   }
 
@@ -58,8 +57,8 @@ class AuthDataModel extends AuthData {
       email: json['email'],
       name: json['name'],
       phone: json['phone'],
-      credit: json['credit'],
-      points: json['points'],
+      credit: json['credit'] ?? 0,
+      points: json['points'] ?? 0,
       id: json['id'],
       image: json['image'],
       token: json['token'],

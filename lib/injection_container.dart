@@ -3,6 +3,12 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/network/dio_helper.dart';
 import 'core/network/network_info.dart';
+import 'features/home/data/datasources/home_remote_data_sources.dart';
+import 'features/home/data/repositories/home_repo_impl.dart';
+import 'features/home/domain/repositories/home_repo.dart';
+import 'features/home/domain/usecases/home_usecase.dart';
+import 'features/home/presentation/bloc/bottom_nav_cubit/bottom_nav_cubit.dart';
+import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/login/data/datasources/login_remote_data_sources.dart';
 import 'features/login/data/repositories/login_repo_impl.dart';
 import 'features/login/domain/repositories/login_repo.dart';
@@ -24,10 +30,17 @@ Future<void> initAppModule() async {
   sl.registerFactory(
     () => RegisterBloc(sl()),
   );
+  sl.registerFactory(
+    () => HomeBloc(sl()),
+  );
+  sl.registerFactory(
+    () => BottomNavCubit(),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => LoginUsecase(sl()));
   sl.registerLazySingleton(() => RegisterUsecase(sl()));
+  sl.registerLazySingleton(() => HomeDataUsecase(sl()));
 
   // Repository
   sl.registerLazySingleton<LoginRepo>(
@@ -36,6 +49,9 @@ Future<void> initAppModule() async {
   sl.registerLazySingleton<RegisterRepo>(
     () => RegisterRepoImpl(sl(), sl()),
   );
+  sl.registerLazySingleton<HomeDataRepo>(
+    () => HomeDataRepoImpl(sl(), sl()),
+  );
 
   // Data sources
   sl.registerLazySingleton<LoginRemoteDataSources>(
@@ -43,6 +59,9 @@ Future<void> initAppModule() async {
   );
   sl.registerLazySingleton<RegisterRemoteDataSources>(
     () => RegisterRemoteDataSourcesImpl(sl()),
+  );
+  sl.registerLazySingleton<HomeRemoteDataSources>(
+    () => HomeRemoteDataSourcesImpl(sl()),
   );
 
   //! Core

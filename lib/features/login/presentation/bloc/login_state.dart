@@ -15,4 +15,7 @@ class LoginSuccess extends LoginState {
   const LoginSuccess({required this.data});
 }
 
-class LoginFailure extends LoginState {}
+class LoginFailure extends LoginState {
+  final PrimaryServerException exception;
+  const LoginFailure({required this.exception});  
+}

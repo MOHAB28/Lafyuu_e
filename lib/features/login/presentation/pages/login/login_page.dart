@@ -90,42 +90,45 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 const SizedBox(height: AppSize.s16),
-                BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
-                  if (state is LoginSuccess) {
-                    if (state.data.status != false) {
-                      sl<SharedPreferences>()
-                          .setString(tokenKey, state.data.authData.token)
-                          .then((value) {
-                        if (value) {
-                          token = sl<SharedPreferences>().getString(tokenKey);
-                          Navigator.pushReplacementNamed(
-                            context,
-                            Routes.layoutPage,
-                          );
-                        }
-                      });
-                    } else {
-                      FlushbarHelper.createError(message: state.data.message)
-                          .show(context);
+                BlocConsumer<LoginBloc, LoginState>(
+                  listener: (context, state) {
+                    if (state is LoginSuccess) {
+                      if (state.data.status != false) {
+                        sl<SharedPreferences>()
+                            .setString(tokenKey, state.data.authData.token)
+                            .then((value) {
+                          if (value) {
+                            token = sl<SharedPreferences>().getString(tokenKey);
+                            Navigator.pushReplacementNamed(
+                              context,
+                              Routes.layoutPage,
+                            );
+                          }
+                        });
+                      } else {
+                        FlushbarHelper.createError(message: state.data.message)
+                            .show(context);
+                      }
                     }
-                  }
-                }, builder: (context, state) {
-                  return state is LoginLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : CustomButtonBuilder(
-                          title: AppStrings.signIn,
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              BlocProvider.of<LoginBloc>(context).add(
-                                UserWantToLogin(
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text.trim(),
-                                ),
-                              );
-                            }
-                          },
-                        );
-                }),
+                  },
+                  builder: (context, state) {
+                    return state is LoginLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : CustomButtonBuilder(
+                            title: AppStrings.signIn,
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                BlocProvider.of<LoginBloc>(context).add(
+                                  UserWantToLogin(
+                                    email: _emailController.text.trim(),
+                                    password: _passwordController.text.trim(),
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                  },
+                ),
                 const SizedBox(height: AppSize.s24),
                 TextButton(
                   onPressed: () {},

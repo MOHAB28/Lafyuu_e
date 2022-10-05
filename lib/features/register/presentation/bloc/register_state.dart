@@ -16,4 +16,7 @@ class RegisterSuccess extends RegisterState {
   const RegisterSuccess({required this.data});
 }
 
-class RegisterFailure extends RegisterState {}
+class RegisterFailure extends RegisterState {
+  final PrimaryServerException exception;
+  const RegisterFailure({required this.exception});
+}

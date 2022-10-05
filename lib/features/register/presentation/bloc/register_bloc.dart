@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/error/exception.dart';
 import '../../../login/domain/entities/login_entity.dart';
 import '../../domain/usecases/register_usecase.dart';
 part 'register_event.dart';
@@ -21,10 +22,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       );
 
       successOrFailure.fold(
-        (failure) => emit(RegisterFailure()),
-        (data) {
-          emit(RegisterSuccess(data: data));
-        },
+        (failure) => emit(RegisterFailure(exception: failure)),
+        (data) => emit(RegisterSuccess(data: data)),
       );
     });
   }

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/error/exception.dart';
 import '../../domain/entities/login_entity.dart';
 import '../../domain/usecases/login_usecase.dart';
 part 'login_event.dart';
@@ -23,10 +24,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
 
       successOrFailure.fold(
-        (failure) => emit(LoginFailure()),
-        (data) {
-          emit(LoginSuccess(data: data));
-        },
+        (failure) => emit(LoginFailure(exception: failure)),
+        (data) => emit(LoginSuccess(data: data)),
       );
     });
   }

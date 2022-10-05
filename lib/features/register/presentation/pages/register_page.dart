@@ -130,44 +130,48 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: AppSize.s16),
                 BlocConsumer<RegisterBloc, RegisterState>(
-                    listener: (context, state) {
-                  if (state is RegisterSuccess) {
-                    if (state.data.status != false) {
-                      sl<SharedPreferences>()
-                          .setString(tokenKey, state.data.authData.token)
-                          .then((value) {
-                        if (value) {
-                          token = sl<SharedPreferences>().getString(tokenKey);
-                          Navigator.pushReplacementNamed(
-                            context,
-                            Routes.layoutPage,
-                          );
-                        }
-                      });
-                    } else {
-                      FlushbarHelper.createError(message: state.data.message)
-                          .show(context);
+                  listener: (context, state) {
+                    if (state is RegisterSuccess) {
+                      if (state.data.status != false) {
+                        sl<SharedPreferences>()
+                            .setString(tokenKey, state.data.authData.token)
+                            .then((value) {
+                          if (value) {
+                            token = sl<SharedPreferences>().getString(tokenKey);
+                            Navigator.pushReplacementNamed(
+                              context,
+                              Routes.layoutPage,
+                            );
+                          }
+                        });
+                      } else {
+                        FlushbarHelper.createError(message: state.data.message)
+                            .show(context);
+                      }
+                    } else if (state is RegisterFailure) {
+                      debugPrint(state.exception.message);
                     }
-                  }
-                }, builder: (context, state) {
-                  return state is RegisterLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : CustomButtonBuilder(
-                          title: AppStrings.signUp,
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              BlocProvider.of<RegisterBloc>(context).add(
-                                UserWantToRegister(
-                                  email: _emailController.text.trim(),
-                                  phone: _phoneController.text.trim(),
-                                  name: _nameController.text.trim(),
-                                  password: _passwordController.text.trim(),
-                                ),
-                              );
-                            }
-                          },
-                        );
-                }),
+                  },
+                  builder: (context, state) {
+                    return state is RegisterLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : CustomButtonBuilder(
+                            title: AppStrings.signUp,
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                BlocProvider.of<RegisterBloc>(context).add(
+                                  UserWantToRegister(
+                                    email: _emailController.text.trim(),
+                                    phone: _phoneController.text.trim(),
+                                    name: _nameController.text.trim(),
+                                    password: _passwordController.text.trim(),
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                  },
+                ),
                 const SizedBox(height: AppSize.s24),
                 CustomTextButtonForAuth(
                   title1: AppStrings.haveAnAccount,

@@ -106,6 +106,7 @@ class DioHelperImpl implements DioHelper {
       if (!isMultipart) 'Content-Type': 'application/json',
       if (!isMultipart) 'Accept': 'application/json',
       if (token != null) 'token': token,
+      'lang' : 'en',
     };
 
     debugPrint('URL => ${dio.options.baseUrl + endPoint}');
@@ -173,13 +174,13 @@ extension on DioHelper {
       debugPrint('Response_Data => ${r.data}');
       debugPrint('Response_Code => ${r.statusCode}');
 
-      if (r.data['status'] == false) {
-        throw PrimaryServerException(
-          message: r.data['message'],
-          code: r.statusCode ?? 500,
-          error: r.data['message'],
-        );
-      }
+      // if (r.data['status'] == false) {
+      //   throw PrimaryServerException(
+      //     message: r.data['message'],
+      //     code: r.statusCode ?? 500,
+      //     error: r.data['message'],
+      //   );
+      // }
 
       return r.data;
     } on DioError catch (e) {

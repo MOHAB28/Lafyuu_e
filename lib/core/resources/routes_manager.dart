@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import '../../features/home/presentation/pages/layout/layout_page.dart';
 import '../../features/register/presentation/pages/register_page.dart';
 import '../../features/login/presentation/pages/login/login_page.dart';
 import '../../features/login/presentation/pages/splash/splash_page.dart';
@@ -16,6 +17,7 @@ class Routes {
       splashPageKey: (context) => const SplashView(),
       loginPageKey: (context) => const LoginPage(),
       registerPageKey: (context) => const RegisterPage(),
+      layoutPage: (context) => const LayoutPage(),
     };
   }
 }
