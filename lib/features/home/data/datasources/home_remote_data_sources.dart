@@ -11,7 +11,7 @@ class HomeRemoteDataSourcesImpl implements HomeRemoteDataSources {
   HomeRemoteDataSourcesImpl(this._dioHelper);
   @override
   Future<HomeModel> getHomeData() async {
-    final response = await _dioHelper.post(
+    final response = await _dioHelper.get(
       endPoint: homeEndPoint,
       token: token ?? '',
     );

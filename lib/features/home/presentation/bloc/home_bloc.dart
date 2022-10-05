@@ -21,7 +21,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         (failure) => emit(HomeFailure()),
         (data) {
           homeData = data;
-          emit(HomeLoading());
+          emit(HomeLoaded());
         },
       );
     });

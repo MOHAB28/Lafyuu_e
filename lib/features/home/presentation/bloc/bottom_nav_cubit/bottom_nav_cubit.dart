@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../pages/layout/home/home_page.dart';
+
 abstract class BottomNavStates {}
 
 class BottomNavIntialState extends BottomNavStates {}
@@ -13,9 +15,7 @@ class BottomNavCubit extends Cubit<BottomNavStates> {
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
   List<Widget> screens = const [
-    Center(
-      child: Text('Home'),
-    ),
+    HomePage(),
     Center(
       child: Text('Explore'),
     ),

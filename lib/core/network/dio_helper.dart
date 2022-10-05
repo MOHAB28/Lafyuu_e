@@ -69,6 +69,7 @@ class DioHelperImpl implements DioHelper {
       if (!isMultipart) 'Content-Type': 'application/json',
       if (!isMultipart) 'Accept': 'application/json',
       if (token != null) 'token': token,
+      'lang' : 'en',
     };
 
     debugPrint('URL => ${dio.options.baseUrl + endPoint}');
@@ -146,6 +147,7 @@ class DioHelperImpl implements DioHelper {
       if (!isMultipart) 'Content-Type': 'application/json',
       if (!isMultipart) 'Accept': 'application/json',
       if (token != null) 'token': token,
+      'lang' : 'en',
     };
 
     debugPrint('URL => ${dio.options.baseUrl + endPoint}');
