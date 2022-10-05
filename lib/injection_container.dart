@@ -1,6 +1,10 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'features/profile/data/datasources/profile_remote_data_sources.dart';
+import 'features/profile/data/repositories/profile_repo_impl.dart';
+import 'features/profile/domain/repositories/profile_repo.dart';
+import 'features/profile/domain/usecases/updata_profile_usecase.dart';
 import 'core/network/dio_helper.dart';
 import 'core/network/network_info.dart';
 import 'features/home/data/datasources/home_remote_data_sources.dart';
@@ -14,6 +18,8 @@ import 'features/login/data/repositories/login_repo_impl.dart';
 import 'features/login/domain/repositories/login_repo.dart';
 import 'features/login/domain/usecases/login_usecase.dart';
 import 'features/login/presentation/bloc/login_bloc.dart';
+import 'features/profile/domain/usecases/get_profile_usecase.dart';
+import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/register/data/datasources/register_remote_data_sources.dart';
 import 'features/register/data/repositories/register_repo_impl.dart';
 import 'features/register/domain/repositories/register_repo.dart';
@@ -34,6 +40,9 @@ Future<void> initAppModule() async {
     () => HomeBloc(sl()),
   );
   sl.registerFactory(
+    () => ProfileBloc(sl(),sl()),
+  );
+  sl.registerFactory(
     () => BottomNavCubit(),
   );
 
@@ -41,6 +50,8 @@ Future<void> initAppModule() async {
   sl.registerLazySingleton(() => LoginUsecase(sl()));
   sl.registerLazySingleton(() => RegisterUsecase(sl()));
   sl.registerLazySingleton(() => HomeDataUsecase(sl()));
+  sl.registerLazySingleton(() => GetProfileDataUsecase(sl()));
+  sl.registerLazySingleton(() => UpdataProfileUsecase(sl()));
 
   // Repository
   sl.registerLazySingleton<LoginRepo>(
@@ -52,6 +63,9 @@ Future<void> initAppModule() async {
   sl.registerLazySingleton<HomeDataRepo>(
     () => HomeDataRepoImpl(sl(), sl()),
   );
+  sl.registerLazySingleton<ProfileRepo>(
+    () => ProfileRepoImpl(sl(), sl()),
+  );
 
   // Data sources
   sl.registerLazySingleton<LoginRemoteDataSources>(
@@ -62,6 +76,9 @@ Future<void> initAppModule() async {
   );
   sl.registerLazySingleton<HomeRemoteDataSources>(
     () => HomeRemoteDataSourcesImpl(sl()),
+  );
+  sl.registerLazySingleton<ProfileRemoteDataSources>(
+    () => ProfileRemoteDataSourcesImpl(sl()),
   );
 
   //! Core

@@ -6,6 +6,7 @@ import 'core/resources/theme_manager.dart';
 import 'features/home/presentation/bloc/bottom_nav_cubit/bottom_nav_cubit.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/login/presentation/bloc/login_bloc.dart';
+import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/register/presentation/bloc/register_bloc.dart';
 import 'injection_container.dart';
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<RegisterBloc>()),
         BlocProvider(create: (_) => sl<HomeBloc>()),
         BlocProvider(create: (_) => sl<BottomNavCubit>()),
+        BlocProvider(create: (_) => sl<ProfileBloc>()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

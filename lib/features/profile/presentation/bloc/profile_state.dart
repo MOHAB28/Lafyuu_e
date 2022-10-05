@@ -17,6 +17,9 @@ class GetProfileDataFailure extends ProfileState {}
 
 class UpdataProfileLoading extends ProfileState {}
 
-class UpdataProfileSuccess extends ProfileState {}
+class UpdataProfileSuccess extends ProfileState {
+  final AuthEntity authEntity;
+  const UpdataProfileSuccess(this.authEntity);
+}
 
 class UpdataProfileFailure extends ProfileState {}

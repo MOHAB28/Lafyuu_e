@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../profile/presentation/pages/profile_page.dart';
 import '../../pages/layout/home/home_page.dart';
 
 abstract class BottomNavStates {}
@@ -25,9 +26,7 @@ class BottomNavCubit extends Cubit<BottomNavStates> {
     Center(
       child: Text('Offer'),
     ),
-    Center(
-      child: Text('Profile'),
-    ),
+    ProfilePage(),
   ];
   void changeCurrentIndex(int index) {
     _currentIndex = index;

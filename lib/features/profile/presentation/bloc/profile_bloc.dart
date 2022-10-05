@@ -41,7 +41,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         (failure) => emit(UpdataProfileFailure()),
         (data) {
           authData = data;
-          emit(UpdataProfileSuccess());
+          emit(UpdataProfileSuccess(data));
         },
       );
     });

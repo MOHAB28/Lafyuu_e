@@ -68,7 +68,7 @@ class DioHelperImpl implements DioHelper {
       if (isMultipart) 'Content-Type': 'multipart/form-data',
       if (!isMultipart) 'Content-Type': 'application/json',
       if (!isMultipart) 'Accept': 'application/json',
-      if (token != null) 'token': token,
+      if (token != null) 'Authorization': token,
       'lang' : 'en',
     };
 
@@ -106,7 +106,7 @@ class DioHelperImpl implements DioHelper {
       if (isMultipart) 'Content-Type': 'multipart/form-data',
       if (!isMultipart) 'Content-Type': 'application/json',
       if (!isMultipart) 'Accept': 'application/json',
-      if (token != null) 'token': token,
+      if (token != null) 'Authorization': token,
       'lang' : 'en',
     };
 
@@ -146,7 +146,7 @@ class DioHelperImpl implements DioHelper {
       if (isMultipart) 'Content-Type': 'multipart/form-data',
       if (!isMultipart) 'Content-Type': 'application/json',
       if (!isMultipart) 'Accept': 'application/json',
-      if (token != null) 'token': token,
+      if (token != null) 'Authorization': token,
       'lang' : 'en',
     };
 
