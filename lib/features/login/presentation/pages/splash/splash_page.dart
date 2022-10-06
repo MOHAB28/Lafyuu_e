@@ -40,6 +40,7 @@ class _SplashViewState extends State<SplashView> {
     return Scaffold(
       backgroundColor: ColorManager.blue,
       appBar: AppBar(
+        elevation: AppSize.s0,
         toolbarHeight: AppSize.s1,
         backgroundColor: ColorManager.blue,
       ),

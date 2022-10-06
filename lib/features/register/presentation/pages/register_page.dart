@@ -32,6 +32,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: AppSize.s0,
         toolbarHeight: AppSize.s1,
       ),
       body: Form(
