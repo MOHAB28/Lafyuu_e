@@ -10,7 +10,7 @@ ThemeData getApplicationTheme() {
     scaffoldBackgroundColor: ColorManager.white,
     appBarTheme: AppBarTheme(
       backgroundColor: ColorManager.white,
-      elevation: AppSize.s0,
+      elevation: 0.3,
       iconTheme: const IconThemeData(color: ColorManager.grey),
       systemOverlayStyle: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

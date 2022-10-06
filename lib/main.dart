@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc_observer.dart';
 import 'core/resources/routes_manager.dart';
 import 'core/resources/theme_manager.dart';
+import 'features/favourite/presentation/bloc/favourite_bloc.dart';
 import 'features/home/presentation/bloc/bottom_nav_cubit/bottom_nav_cubit.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/login/presentation/bloc/login_bloc.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<HomeBloc>()),
         BlocProvider(create: (_) => sl<BottomNavCubit>()),
         BlocProvider(create: (_) => sl<ProfileBloc>()),
+        BlocProvider(create: (_) => sl<FavouriteBloc>()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

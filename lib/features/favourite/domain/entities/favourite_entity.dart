@@ -12,16 +12,26 @@ class StatusEntity extends Equatable {
   List<Object?> get props => [message, status];
 }
 
+class FavProductsEntity extends Equatable {
+  final List<FavouriteProductEntity> products;
+  const FavProductsEntity({
+    required this.products,
+  });
+  
+  @override
+  List<Object?> get props => [products];
+}
+
 class FavouriteEntity extends Equatable {
   final StatusEntity status;
-  final List<FavouriteProductEntity> products;
+  final FavProductsEntity favProductsEntity;
   const FavouriteEntity({
     required this.status,
-    required this.products,
+    required this.favProductsEntity,
   });
 
   @override
-  List<Object?> get props => [status, products];
+  List<Object?> get props => [status, favProductsEntity];
 }
 
 class FavouriteProductEntity extends Equatable {
@@ -31,7 +41,7 @@ class FavouriteProductEntity extends Equatable {
   final String description;
   final dynamic price;
   final dynamic oldPrice;
-  final dynamic discount;
+  final int discount;
   const FavouriteProductEntity({
     required this.description,
     required this.discount,

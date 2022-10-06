@@ -34,6 +34,7 @@ class AppStrings {
   static const String editProfile = 'Edit Profile';
   static const String changePass = 'Change password';
   static const String save = 'Save';
+  static const String favoriteProduct = 'Favorite Product';
 
   // error handler
   static const String badRequestError = 'bad_request_error';

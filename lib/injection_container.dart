@@ -1,6 +1,12 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
+import 'features/favourite/data/datasources/favourite_remote_data_sources.dart';
+import 'features/favourite/data/repositories/fav_repo_impl.dart';
+import 'features/favourite/domain/repositories/fav_repo.dart';
+import 'features/favourite/domain/usecases/add_or_remove_fav_usecase.dart';
+import 'features/favourite/domain/usecases/get_favs_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'features/favourite/presentation/bloc/favourite_bloc.dart';
 import 'features/profile/data/datasources/profile_remote_data_sources.dart';
 import 'features/profile/data/repositories/profile_repo_impl.dart';
 import 'features/profile/domain/repositories/profile_repo.dart';
@@ -37,6 +43,9 @@ Future<void> initAppModule() async {
     () => RegisterBloc(sl()),
   );
   sl.registerFactory(
+    () => FavouriteBloc(sl(),sl()),
+  );
+  sl.registerFactory(
     () => HomeBloc(sl()),
   );
   sl.registerFactory(
@@ -52,6 +61,8 @@ Future<void> initAppModule() async {
   sl.registerLazySingleton(() => HomeDataUsecase(sl()));
   sl.registerLazySingleton(() => GetProfileDataUsecase(sl()));
   sl.registerLazySingleton(() => UpdataProfileUsecase(sl()));
+  sl.registerLazySingleton(() => GetAllFavouritesUsecase(sl()));
+  sl.registerLazySingleton(() => AddOrRemoveFavUsecsae(sl()));
 
   // Repository
   sl.registerLazySingleton<LoginRepo>(
@@ -62,6 +73,9 @@ Future<void> initAppModule() async {
   );
   sl.registerLazySingleton<HomeDataRepo>(
     () => HomeDataRepoImpl(sl(), sl()),
+  );
+  sl.registerLazySingleton<FavouritreRepo>(
+    () => FavouriteRepoImpl(sl(), sl()),
   );
   sl.registerLazySingleton<ProfileRepo>(
     () => ProfileRepoImpl(sl(), sl()),
@@ -79,6 +93,9 @@ Future<void> initAppModule() async {
   );
   sl.registerLazySingleton<ProfileRemoteDataSources>(
     () => ProfileRemoteDataSourcesImpl(sl()),
+  );
+  sl.registerLazySingleton<FavouriteRemoteDataSources>(
+    () => FavouriteRemoteDataSourcesImpl(sl()),
   );
 
   //! Core

@@ -14,3 +14,5 @@ class HomeLoading extends HomeState {}
 class HomeLoaded extends HomeState {}
 
 class HomeFailure extends HomeState {}
+
+class ChangeFavoritesState extends HomeState {}

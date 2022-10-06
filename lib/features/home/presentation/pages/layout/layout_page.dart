@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../../../../core/resources/color_manager.dart';
+import '../../../../../core/resources/routes_manager.dart';
 import '../../bloc/bottom_nav_cubit/bottom_nav_cubit.dart';
 import '../../bloc/home_bloc.dart';
 
@@ -28,7 +29,18 @@ class _LayoutPageState extends State<LayoutPage> {
         builder: (context, state) {
       var cubit = BottomNavCubit.get(context);
       return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () =>
+                  Navigator.pushNamed(context, Routes.allFavsPageKey),
+              icon: const Icon(
+                Icons.favorite_outline,
+                color: ColorManager.grey,
+              ),
+            ),
+          ],
+        ),
         body: cubit.screens[cubit.currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,

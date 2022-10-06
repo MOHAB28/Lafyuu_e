@@ -24,7 +24,7 @@ class FavouriteProductModel extends FavouriteProductEntity {
     String? description,
     dynamic price,
     dynamic oldPrice,
-    dynamic discount,
+    int? discount,
   }) : super(
           id: id!,
           image: image!,
@@ -32,7 +32,7 @@ class FavouriteProductModel extends FavouriteProductEntity {
           description: description!,
           price: price,
           oldPrice: oldPrice,
-          discount: discount,
+          discount: discount!,
         );
 
   factory FavouriteProductModel.fromJson(Map<String, dynamic> json) {
@@ -40,10 +40,28 @@ class FavouriteProductModel extends FavouriteProductEntity {
       id: json['id'],
       price: json['price'],
       oldPrice: json['old_price'],
-      discount: json['discount'],
-      image: json['image'],
-      name: json['name'],
-      description: json['description'],
+      discount: json['discount'] ?? 0,
+      image: json['image'] ?? '',
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+    );
+  }
+}
+
+class FavProductsModel extends FavProductsEntity {
+  FavProductsModel({
+    List<FavouriteProductModel>? products,
+  }) : super(products: products!);
+
+  factory FavProductsModel.fromJson(Map<String, dynamic> json) {
+    List<FavouriteProductModel>? fP = [];
+    if (json['data'] != null) {
+      for (var product in json['data']) {
+        fP.add(FavouriteProductModel.fromJson(product['product']));
+      }
+    }
+    return FavProductsModel(
+      products: fP,
     );
   }
 }
@@ -51,19 +69,17 @@ class FavouriteProductModel extends FavouriteProductEntity {
 class FavouriteModel extends FavouriteEntity {
   FavouriteModel({
     StatusModel? status,
-    List<FavouriteProductModel>? products,
-  }) : super(products: products!, status: status!);
+    FavProductsModel? favProductsModel,
+  }) : super(
+          status: status!,
+          favProductsEntity: favProductsModel!,
+        );
 
-  factory FavouriteModel.fromJson(Map<String,dynamic> json) {
-    List<FavouriteProductModel>? fP = [];
-    if(json['data'] != null) {
-      for(var product in json['data']) {
-        fP.add(FavouriteProductModel.fromJson(product));
-      }
-    }
+  factory FavouriteModel.fromJson(Map<String, dynamic> json) {
     return FavouriteModel(
       status: StatusModel.fromJson(json),
-      products: fP,
+      favProductsModel:
+          json['data'] != null ? FavProductsModel.fromJson(json['data']) : null,
     );
   }
 }

@@ -14,7 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -71,6 +70,11 @@ class HomeGridViewBuilder extends StatelessWidget {
         itemBuilder: (ctx, i) {
           return ProductItemBuilder(
             product: products![i],
+            name: products![i].name,
+            price: products![i].price,
+            oldPrice: products![i].oldPrice,
+            discount: products![i].discount,
+            image: products![i].image,
           );
         },
       );

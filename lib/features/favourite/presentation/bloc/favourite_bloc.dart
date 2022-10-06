@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lafyuu/core/error/exception.dart';
 import '../../domain/entities/favourite_entity.dart';
 import '../../../../core/usecase/usecase.dart';
 import '../../domain/usecases/add_or_remove_fav_usecase.dart';
@@ -22,7 +23,10 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
       emit(GetAllFavLoading());
       final successOrFailure = await _getAllFavouritesUsecase(NoParams());
       successOrFailure.fold(
-        (failure) => emit(GetAllFavFailure()),
+        (failure) {
+          debugPrint(failure.message);
+          emit(GetAllFavFailure(failure));
+        },
         (data) {
           favouriteEntity = data;
           emit(GetAllFavSuccess());
@@ -36,7 +40,7 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
         (failure) => emit(AddOrRemoveFavFailure()),
         (data) {
           statusEntity = data;
-          emit(AddOrRemoveFavSuccess());
+          emit(AddOrRemoveFavSuccess(data));
         },
       );
     });
