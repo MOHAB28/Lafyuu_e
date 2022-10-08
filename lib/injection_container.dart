@@ -1,5 +1,12 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
+import 'features/cart/data/datasources/cart_remote_data_sources.dart';
+import 'features/cart/data/repositories/cart_repo_impl.dart';
+import 'features/cart/domain/repositories/carts_repo.dart';
+import 'features/cart/domain/usecases/add_or_remove_cart.dart';
+import 'features/cart/domain/usecases/get_carts_usecase.dart';
+import 'features/cart/domain/usecases/updata_cart_usecase.dart';
+import 'features/cart/presentation/bloc/cart_bloc.dart';
 import 'features/favourite/data/datasources/favourite_remote_data_sources.dart';
 import 'features/favourite/data/repositories/fav_repo_impl.dart';
 import 'features/favourite/domain/repositories/fav_repo.dart';
@@ -43,13 +50,16 @@ Future<void> initAppModule() async {
     () => RegisterBloc(sl()),
   );
   sl.registerFactory(
-    () => FavouriteBloc(sl(),sl()),
+    () => FavouriteBloc(sl(), sl()),
   );
   sl.registerFactory(
     () => HomeBloc(sl()),
   );
   sl.registerFactory(
-    () => ProfileBloc(sl(),sl()),
+    () => ProfileBloc(sl(), sl()),
+  );
+  sl.registerFactory(
+    () => CartBloc(sl(), sl(), sl()),
   );
   sl.registerFactory(
     () => BottomNavCubit(),
@@ -63,6 +73,9 @@ Future<void> initAppModule() async {
   sl.registerLazySingleton(() => UpdataProfileUsecase(sl()));
   sl.registerLazySingleton(() => GetAllFavouritesUsecase(sl()));
   sl.registerLazySingleton(() => AddOrRemoveFavUsecsae(sl()));
+  sl.registerLazySingleton(() => AddOrRemoveCartUsecase(sl()));
+  sl.registerLazySingleton(() => UpdateCartUsecase(sl()));
+  sl.registerLazySingleton(() => GetCartsUsecase(sl()));
 
   // Repository
   sl.registerLazySingleton<LoginRepo>(
@@ -80,6 +93,9 @@ Future<void> initAppModule() async {
   sl.registerLazySingleton<ProfileRepo>(
     () => ProfileRepoImpl(sl(), sl()),
   );
+  sl.registerLazySingleton<CartsRepo>(
+    () => CartsRepoImpl(sl(), sl()),
+  );
 
   // Data sources
   sl.registerLazySingleton<LoginRemoteDataSources>(
@@ -96,6 +112,9 @@ Future<void> initAppModule() async {
   );
   sl.registerLazySingleton<FavouriteRemoteDataSources>(
     () => FavouriteRemoteDataSourcesImpl(sl()),
+  );
+  sl.registerLazySingleton<CartRemoteDataSources>(
+    () => CartRemoteDataSourcesImpl(sl()),
   );
 
   //! Core

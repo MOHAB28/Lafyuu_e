@@ -13,3 +13,8 @@ class ChangeFavEvent extends HomeEvent {
   final int id;
   const ChangeFavEvent(this.id);
 }
+
+class ChangeCartEvent extends HomeEvent {
+  final int id;
+  const ChangeCartEvent(this.id);
+}

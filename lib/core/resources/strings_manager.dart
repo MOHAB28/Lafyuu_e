@@ -10,7 +10,6 @@ class AppStrings {
   static const String logout = 'logout';
   static const String registeredSuccess = 'User registerd successfully';
   static const String makeSure = 'Make sure that u have fill all forms';
-
   static const String letsGetStarted = 'Let\'s Get Started';
   static const String welcome = 'Welcome to Lafyuu';
   static const String createAccount = 'Create an new account';
@@ -35,6 +34,8 @@ class AppStrings {
   static const String changePass = 'Change password';
   static const String save = 'Save';
   static const String favoriteProduct = 'Favorite Product';
+  static const String addToCart = 'Add to cart';
+  static const String removeToCart = 'Remove to cart';
 
   // error handler
   static const String badRequestError = 'bad_request_error';

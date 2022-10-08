@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lafyuu/features/favourite/presentation/bloc/favourite_bloc.dart';
 import 'package:lafyuu/features/home/presentation/bloc/home_bloc.dart';
 import '../../../../../core/resources/color_manager.dart';
+import '../../../../../core/resources/strings_manager.dart';
 import '../../../../../core/resources/values_manager.dart';
+import '../../../../login/presentation/widgets/custom_button.dart';
 import '../../../domain/entities/home_entity.dart';
 
 class ProductDetailsPage extends StatefulWidget {
@@ -66,38 +68,41 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       ),
                       Flexible(
                         child: BlocConsumer<FavouriteBloc, FavouriteState>(
-                            listener: (context, state) {
-                          if (state is AddOrRemoveFavFailure) {
-                            BlocProvider.of<HomeBloc>(context)
-                                .add(ChangeFavEvent(widget.productsEntity.id));
-                          } else if (state is AddOrRemoveFavSuccess) {
-                            FlushbarHelper.createSuccess(
-                                message: state.data.message).show(context);
-                          }
-                        }, builder: (context, state) {
-                          return IconButton(
-                            onPressed: () {
+                          listener: (context, state) {
+                            if (state is AddOrRemoveFavFailure) {
                               BlocProvider.of<HomeBloc>(context).add(
                                   ChangeFavEvent(widget.productsEntity.id));
-                              BlocProvider.of<FavouriteBloc>(context).add(
-                                  AddOrRemoveFavsEvent(
-                                      widget.productsEntity.id));
-                            },
-                            icon: HomeBloc.get(context)
-                                        .favorties[widget.productsEntity.id] ==
-                                    true
-                                ? const Icon(
-                                    Icons.favorite,
-                                    size: AppSize.s35,
-                                    color: ColorManager.grey,
-                                  )
-                                : const Icon(
-                                    Icons.favorite_outline,
-                                    size: AppSize.s35,
-                                    color: ColorManager.grey,
-                                  ),
-                          );
-                        }),
+                            } else if (state is AddOrRemoveFavSuccess) {
+                              FlushbarHelper.createSuccess(
+                                      message: state.data.message)
+                                  .show(context);
+                            }
+                          },
+                          builder: (context, state) {
+                            return IconButton(
+                              onPressed: () {
+                                BlocProvider.of<HomeBloc>(context).add(
+                                    ChangeFavEvent(widget.productsEntity.id));
+                                BlocProvider.of<FavouriteBloc>(context).add(
+                                    AddOrRemoveFavsEvent(
+                                        widget.productsEntity.id));
+                              },
+                              icon: HomeBloc.get(context).favorties[
+                                          widget.productsEntity.id] ==
+                                      true
+                                  ? const Icon(
+                                      Icons.favorite,
+                                      size: AppSize.s35,
+                                      color: ColorManager.grey,
+                                    )
+                                  : const Icon(
+                                      Icons.favorite_outline,
+                                      size: AppSize.s35,
+                                      color: ColorManager.grey,
+                                    ),
+                            );
+                          },
+                        ),
                       )
                     ],
                   ),
@@ -117,6 +122,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   Text(
                     widget.productsEntity.description,
                     style: Theme.of(context).textTheme.displaySmall,
+                  ),
+                  const SizedBox(height: AppSize.s16),
+                  CustomButtonBuilder(
+                    onTap: (){},
+                    title: AppStrings.addToCart,
                   ),
                 ],
               ),
