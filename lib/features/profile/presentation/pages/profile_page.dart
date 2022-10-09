@@ -2,11 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lafyuu/features/profile/presentation/pages/update_profile_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/resources/color_manager.dart';
+import '../../../../core/resources/routes_manager.dart';
 import '../../../../core/resources/strings_manager.dart';
 import '../../../../core/resources/values_manager.dart';
+import '../../../../injection_container.dart';
 import '../../../login/domain/entities/login_entity.dart';
+import '../../../login/presentation/pages/login/login_page.dart';
 import '../bloc/profile_bloc.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -110,6 +114,14 @@ class _ProfilePageState extends State<ProfilePage> {
             authData.authData.phone,
             style: Theme.of(context).textTheme.displaySmall,
           ),
+        ),
+        ListTile(
+          onTap: () {
+            Navigator.pushReplacementNamed(context, Routes.loginPageKey);
+            sl<SharedPreferences>().remove(tokenKey);
+          },
+          trailing: const Icon(Icons.logout),
+          title: const Text(AppStrings.logout),
         ),
       ],
     );

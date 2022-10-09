@@ -83,8 +83,8 @@ class CartItemBuillder extends StatelessWidget {
                               const SizedBox(width: AppSize.s8),
                               InkWell(
                                 onTap: () {
-                                  CartBloc.get(context)
-                                      .add(AddOrRemoveCartEvent(data.products.id));
+                                  CartBloc.get(context).add(
+                                      AddOrRemoveCartEvent(data.products.id));
                                   FlushbarHelper.createLoading(
                                     message: AppStrings.loading,
                                     linearProgressIndicator:
