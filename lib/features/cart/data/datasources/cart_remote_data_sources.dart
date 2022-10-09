@@ -1,12 +1,13 @@
 import '../../../../core/network/dio_helper.dart';
 import '../../../../core/network/end_points.dart';
+import '../../domain/repositories/carts_repo.dart';
 import '../models/cart_model.dart';
 import '../../../favourite/data/models/favourite_model.dart';
 
 abstract class CartRemoteDataSources {
   Future<CartModel> getCarts();
   Future<StatusModel> addOrRemoveCart(int id);
-  Future<StatusModel> updateCart(int id);
+  Future<StatusModel> updateCart(UpdateCartInput input);
 }
 
 class CartRemoteDataSourcesImpl implements CartRemoteDataSources {
@@ -37,10 +38,13 @@ class CartRemoteDataSourcesImpl implements CartRemoteDataSources {
   }
 
   @override
-  Future<StatusModel> updateCart(int id) async {
+  Future<StatusModel> updateCart(UpdateCartInput input) async {
     final response = await _dioHelper.put(
-      endPoint: '$cartsEndPoint/$id',
+      endPoint: '$cartsEndPoint/${input.id}',
       token: token ?? '',
+      data: {
+        'quantity' : input.quantity,
+      }
     );
 
     return StatusModel.fromJson(response);

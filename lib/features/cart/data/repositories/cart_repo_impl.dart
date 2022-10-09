@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import '../../../favourite/domain/entities/favourite_entity.dart';
 import '../../domain/entities/cart_entity.dart';
 import '../../../../core/error/exception.dart';
@@ -48,6 +49,7 @@ class CartsRepoImpl implements CartsRepo {
         final response = await _remoteDataSources.getCarts();
         return Right(response);
       } catch (error) {
+        debugPrint('Mohab $error');
         return Left(
           PrimaryServerException(
             code: 0,
@@ -69,11 +71,11 @@ class CartsRepoImpl implements CartsRepo {
 
   @override
   Future<Either<PrimaryServerException, StatusEntity>> updateCart(
-      int id) async {
+      UpdateCartInput input) async {
     if (await _networkInfo.isConnected == ConnectivityResult.wifi ||
         await _networkInfo.isConnected == ConnectivityResult.mobile) {
       try {
-        final response = await _remoteDataSources.updateCart(id);
+        final response = await _remoteDataSources.updateCart(input);
         return Right(response);
       } catch (error) {
         return Left(

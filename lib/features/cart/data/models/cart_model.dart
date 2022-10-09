@@ -16,7 +16,7 @@ class CartModel extends CartEntity {
   factory CartModel.fromJson(Map<String, dynamic> json) {
     return CartModel(
       status: json['status'],
-      message: json['message'],
+      message: json['message'] ?? '',
       cartDataM:
           json['data'] != null ? CartDataModel.fromJson(json['data']) : null,
     );

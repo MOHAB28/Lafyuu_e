@@ -35,3 +35,9 @@ class GetCartsLoaded extends CartState {
 }
 
 class GetCartsFailure extends CartState {}
+
+class InitIncreaseQuantityState extends CartState {}
+class IncreaseQuantityState extends CartState {}
+
+class InitDecreaseQuantityState extends CartState {}
+class DecreaseQuantityState extends CartState {}

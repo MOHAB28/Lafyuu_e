@@ -2,6 +2,7 @@ import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lafyuu/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:lafyuu/features/favourite/presentation/bloc/favourite_bloc.dart';
 import 'package:lafyuu/features/home/presentation/bloc/home_bloc.dart';
 import '../../../../../core/resources/color_manager.dart';
@@ -93,7 +94,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   ? const Icon(
                                       Icons.favorite,
                                       size: AppSize.s35,
-                                      color: ColorManager.grey,
+                                      color: ColorManager.red,
                                     )
                                   : const Icon(
                                       Icons.favorite_outline,
@@ -124,9 +125,32 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
                   const SizedBox(height: AppSize.s16),
-                  CustomButtonBuilder(
-                    onTap: (){},
-                    title: AppStrings.addToCart,
+                  BlocConsumer<CartBloc, CartState>(
+                    listener: (context, state) {
+                      if (state is AddOrRemoveCartFailure) {
+                        BlocProvider.of<HomeBloc>(context)
+                            .add(ChangeFavEvent(widget.productsEntity.id));
+                      } else if (state is AddOrRemoveCartLoaded) {
+                        FlushbarHelper.createSuccess(
+                                message: state.statusEntity.message)
+                            .show(context);
+                      }
+                    },
+                    builder: (context, state) {
+                      return CustomButtonBuilder(
+                        onTap: () {
+                          BlocProvider.of<HomeBloc>(context)
+                              .add(ChangeCartEvent(widget.productsEntity.id));
+                          BlocProvider.of<CartBloc>(context).add(
+                              AddOrRemoveCartEvent(widget.productsEntity.id));
+                        },
+                        title: HomeBloc.get(context)
+                                    .carts[widget.productsEntity.id] ==
+                                true
+                            ? AppStrings.removeToCart
+                            : AppStrings.addToCart,
+                      );
+                    },
                   ),
                 ],
               ),

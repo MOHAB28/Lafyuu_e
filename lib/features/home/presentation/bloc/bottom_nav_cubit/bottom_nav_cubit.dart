@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../cart/presentation/pages/cart_page/cart_page.dart';
 import '../../../../profile/presentation/pages/profile_page.dart';
 import '../../pages/layout/home/home_page.dart';
 
@@ -20,9 +21,7 @@ class BottomNavCubit extends Cubit<BottomNavStates> {
     Center(
       child: Text('Explore'),
     ),
-    Center(
-      child: Text('Cart'),
-    ),
+    CartPage(),
     Center(
       child: Text('Offer'),
     ),

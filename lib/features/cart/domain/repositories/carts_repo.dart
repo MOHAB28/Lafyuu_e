@@ -6,5 +6,14 @@ import '../entities/cart_entity.dart';
 abstract class CartsRepo {
   Future<Either<PrimaryServerException, CartEntity>> getCarts();
   Future<Either<PrimaryServerException, StatusEntity>> addOrRemoveCart(int id);
-  Future<Either<PrimaryServerException, StatusEntity>> updateCart(int id);
+  Future<Either<PrimaryServerException, StatusEntity>> updateCart(UpdateCartInput input);
+}
+
+class UpdateCartInput {
+  final int id;
+  final int quantity;
+  const UpdateCartInput({
+    required this.id,
+    required this.quantity,
+  });
 }

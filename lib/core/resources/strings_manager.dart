@@ -33,9 +33,12 @@ class AppStrings {
   static const String editProfile = 'Edit Profile';
   static const String changePass = 'Change password';
   static const String save = 'Save';
+  static const String subTotal = 'Sub total';
+  static const String total = 'Total';
+  static const String checkOut = 'Check Out';
   static const String favoriteProduct = 'Favorite Product';
   static const String addToCart = 'Add to cart';
-  static const String removeToCart = 'Remove to cart';
+  static const String removeToCart = 'Remove from cart';
 
   // error handler
   static const String badRequestError = 'bad_request_error';

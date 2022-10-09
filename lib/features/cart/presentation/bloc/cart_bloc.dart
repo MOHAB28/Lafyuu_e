@@ -16,6 +16,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   final UpdateCartUsecase _updateCartUsecase;
   final AddOrRemoveCartUsecase _addOrRemoveCartUsecase;
   static CartBloc get(BuildContext context) => BlocProvider.of(context);
+  Map<int?, int?> quantity = {};
   StatusEntity? addStatus;
   StatusEntity? updateStatus;
   CartEntity? cartEntity;
@@ -29,7 +30,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(AddOrRemoveCartLoading());
       final successOrFailure = await _addOrRemoveCartUsecase(event.id);
       successOrFailure.fold(
-        (failure) => emit(AddOrRemoveCartFailure()),
+        (failure) {
+          debugPrint(failure.error);
+          emit(AddOrRemoveCartFailure());
+        },
         (data) {
           addStatus = data;
           emit(AddOrRemoveCartLoaded(data));
@@ -40,16 +44,47 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(GetCartsLoading());
       final successOrFailure = await _getCartsUsecase(NoParams());
       successOrFailure.fold(
-        (failure) => emit(GetCartsFailure()),
+        (failure) {
+          debugPrint('Mohab ${failure.error}');
+          emit(GetCartsFailure());
+        },
         (data) {
+          for (var element in data.cartData.cartItemData) {
+            quantity.addAll({
+              element.id: element.quantity,
+            });
+          }
           cartEntity = data;
           emit(GetCartsLoaded(data));
         },
       );
     });
+    on<IncreaseQuantityEvent>((event, emit) async {
+      int q = quantity[event.id]!;
+      q++;
+      quantity[event.id] = q;
+      emit(IncreaseQuantityState());
+    });
+    on<DecreaseQuantityEvent>((event, emit) async {
+      int q = quantity[event.id]!;
+      q--;
+      if (q < 0) {
+        q = 0;
+        quantity[event.id] = q;
+        emit(DecreaseQuantityState());
+      } else {
+        quantity[event.id] = q;
+        emit(DecreaseQuantityState());
+      }
+    });
     on<UpdateCartEvent>((event, emit) async {
       emit(UpdateCartLoading());
-      final successOrFailure = await _updateCartUsecase(event.id);
+      final successOrFailure = await _updateCartUsecase(
+        UpdateCartUsecaseInput(
+          id: event.id,
+          quantity: event.quantity,
+        ),
+      );
       successOrFailure.fold(
         (failure) => emit(UpdateCartFailure()),
         (data) {
