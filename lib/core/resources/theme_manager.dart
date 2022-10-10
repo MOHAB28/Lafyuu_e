@@ -40,6 +40,10 @@ ThemeData getApplicationTheme() {
         fontSize: FontSize.s16,
       ),
       displaySmall: getRegularStyle(color: ColorManager.grey),
+      headlineLarge: getBoldStyle(
+        color: ColorManager.dark,
+        fontSize: FontSize.s24,
+      ),
       headlineSmall: getBoldStyle(color: ColorManager.dark),
       bodySmall:
           getMediumStyle(color: ColorManager.grey, fontSize: FontSize.s10),

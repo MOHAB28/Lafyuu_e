@@ -35,10 +35,15 @@ class AppStrings {
   static const String save = 'Save';
   static const String subTotal = 'Sub total';
   static const String total = 'Total';
+  static const String searchProduct = 'Search Product';
   static const String checkOut = 'Check Out';
   static const String favoriteProduct = 'Favorite Product';
   static const String addToCart = 'Add to cart';
   static const String removeToCart = 'Remove from cart';
+  static const String pleaseStartSearch = 'Please start search';
+  static const String productNotFound = 'Product Not Found';
+  static const String noItems = 'No Items';
+  static const String thankYouForShopping = 'thank you for shopping using lafyuu';
 
   // error handler
   static const String badRequestError = 'bad_request_error';

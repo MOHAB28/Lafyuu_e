@@ -15,7 +15,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(SearchLoading());
       final successOrFailure = await _usecase(event.text);
       successOrFailure.fold(
-        (failure) => emit(SearchFailure()),
+        (failure) {
+          debugPrint(failure.message);
+          emit(SearchFailure());
+        },
         (data) {
           searchEntity = data;
           emit(SearchLoaded());

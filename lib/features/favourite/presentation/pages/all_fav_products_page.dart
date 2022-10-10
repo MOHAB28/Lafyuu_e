@@ -35,60 +35,68 @@ class _AllFavProductPageState extends State<AllFavProductPage> {
         },
         builder: (context, state) {
           var bloc = FavouriteBloc.get(context);
-          if (bloc.favouriteEntity != null) {
-            if (bloc.favouriteEntity!.favProductsEntity.products.isNotEmpty) {
-              return GridView.builder(
-                itemCount:
-                    bloc.favouriteEntity!.favProductsEntity.products.length,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.all(AppPadding.p16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: AppSize.s12,
-                  crossAxisSpacing: AppSize.s12,
-                  childAspectRatio: 3 / 4.8,
-                ),
-                itemBuilder: (ctx, i) {
-                  return ProductItemBuilder(
-                    name: bloc
-                        .favouriteEntity!.favProductsEntity.products[i].name,
-                    price: bloc
-                        .favouriteEntity!.favProductsEntity.products[i].price,
-                    oldPrice: bloc.favouriteEntity!.favProductsEntity
-                        .products[i].oldPrice,
-                    discount: bloc.favouriteEntity!.favProductsEntity
-                        .products[i].discount,
-                    image: bloc
-                        .favouriteEntity!.favProductsEntity.products[i].image,
-                    showRemoveFromLikesButton: true,
-                    onPressed: () {
-                      BlocProvider.of<FavouriteBloc>(context).add(
-                        AddOrRemoveFavsEvent(
-                          bloc.favouriteEntity!.favProductsEntity.products[i]
-                              .id,
-                        ),
-                      );
-                      FlushbarHelper.createLoading(
-                        message: AppStrings.loading,
-                        linearProgressIndicator:
-                            const LinearProgressIndicator(),
-                      ).show(context);
-                    },
-                  );
-                },
-              );
-            } else {
-              Center(
-                child: Text(
-                  'No item',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              );
-            }
-          } else {
+          if (state is GetAllFavLoading) {
             return const Center(child: CircularProgressIndicator());
+          } else if (state is GetAllFavSuccess) {
+            if (bloc.favouriteEntity != null) {
+              if (bloc.favouriteEntity!.favProductsEntity.products.isNotEmpty) {
+                return GridView.builder(
+                  itemCount:
+                      bloc.favouriteEntity!.favProductsEntity.products.length,
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.all(AppPadding.p16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: AppSize.s12,
+                    crossAxisSpacing: AppSize.s12,
+                    childAspectRatio: 3 / 4.8,
+                  ),
+                  itemBuilder: (ctx, i) {
+                    return ProductItemBuilder(
+                      name: bloc
+                          .favouriteEntity!.favProductsEntity.products[i].name,
+                      price: bloc
+                          .favouriteEntity!.favProductsEntity.products[i].price,
+                      oldPrice: bloc.favouriteEntity!.favProductsEntity
+                          .products[i].oldPrice,
+                      discount: bloc.favouriteEntity!.favProductsEntity
+                          .products[i].discount,
+                      image: bloc
+                          .favouriteEntity!.favProductsEntity.products[i].image,
+                      showRemoveFromLikesButton: true,
+                      onPressed: () {
+                        BlocProvider.of<FavouriteBloc>(context).add(
+                          AddOrRemoveFavsEvent(
+                            bloc.favouriteEntity!.favProductsEntity.products[i]
+                                .id,
+                          ),
+                        );
+                        FlushbarHelper.createLoading(
+                          message: AppStrings.loading,
+                          linearProgressIndicator:
+                              const LinearProgressIndicator(),
+                        ).show(context);
+                      },
+                    );
+                  },
+                );
+              } else if (bloc
+                  .favouriteEntity!.favProductsEntity.products.isEmpty) {
+                Center(
+                  child: Text(
+                    AppStrings.noItems,
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                );
+              }
+            }
           }
-          return const SizedBox();
+          return Center(
+            child: Text(
+              AppStrings.noItems,
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+          );
         },
       ),
     );

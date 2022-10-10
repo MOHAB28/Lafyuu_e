@@ -137,7 +137,7 @@ class ProductsModel extends ProductsEntity {
       id: json['id'],
       price: json['price'],
       oldPrice: json['old_price'],
-      discount: json['discount'],
+      discount: json['discount'] ?? 0,
       image: json['image'],
       name: json['name'],
       description: json['description'],
