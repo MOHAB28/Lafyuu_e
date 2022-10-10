@@ -10,6 +10,7 @@ import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/login/presentation/bloc/login_bloc.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/register/presentation/bloc/register_bloc.dart';
+import 'features/search/presentation/bloc/search_bloc.dart';
 import 'injection_container.dart';
 
 Future<void> main() async {
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<ProfileBloc>()),
         BlocProvider(create: (_) => sl<FavouriteBloc>()),
         BlocProvider(create: (_) => sl<CartBloc>()),
+        BlocProvider(create: (_) => sl<SearchBloc>()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

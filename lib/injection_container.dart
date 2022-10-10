@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
+import 'features/search/presentation/bloc/search_bloc.dart';
 import 'features/cart/data/datasources/cart_remote_data_sources.dart';
 import 'features/cart/data/repositories/cart_repo_impl.dart';
 import 'features/cart/domain/repositories/carts_repo.dart';
@@ -38,6 +39,10 @@ import 'features/register/data/repositories/register_repo_impl.dart';
 import 'features/register/domain/repositories/register_repo.dart';
 import 'features/register/domain/usecases/register_usecase.dart';
 import 'features/register/presentation/bloc/register_bloc.dart';
+import 'features/search/data/datasources/search_remote_data_sources.dart';
+import 'features/search/data/repositories/search_repo_impl.dart';
+import 'features/search/domain/repositories/search_repo.dart';
+import 'features/search/domain/usecases/search_usecase.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -54,6 +59,9 @@ Future<void> initAppModule() async {
   );
   sl.registerFactory(
     () => HomeBloc(sl()),
+  );
+  sl.registerFactory(
+    () => SearchBloc(sl()),
   );
   sl.registerFactory(
     () => ProfileBloc(sl(), sl()),
@@ -76,6 +84,7 @@ Future<void> initAppModule() async {
   sl.registerLazySingleton(() => AddOrRemoveCartUsecase(sl()));
   sl.registerLazySingleton(() => UpdateCartUsecase(sl()));
   sl.registerLazySingleton(() => GetCartsUsecase(sl()));
+  sl.registerLazySingleton(() => SearchUsecase(sl()));
 
   // Repository
   sl.registerLazySingleton<LoginRepo>(
@@ -96,6 +105,9 @@ Future<void> initAppModule() async {
   sl.registerLazySingleton<CartsRepo>(
     () => CartsRepoImpl(sl(), sl()),
   );
+  sl.registerLazySingleton<SearchRepo>(
+    () => SearchRepoImpl(sl(), sl()),
+  );
 
   // Data sources
   sl.registerLazySingleton<LoginRemoteDataSources>(
@@ -115,6 +127,9 @@ Future<void> initAppModule() async {
   );
   sl.registerLazySingleton<CartRemoteDataSources>(
     () => CartRemoteDataSourcesImpl(sl()),
+  );
+  sl.registerLazySingleton<SearchRemoteDataSources>(
+    () => SearchRemoteDataSourcesImpl(sl()),
   );
 
   //! Core
