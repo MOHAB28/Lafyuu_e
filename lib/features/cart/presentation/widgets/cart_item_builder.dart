@@ -27,6 +27,7 @@ class CartItemBuillder extends StatelessWidget {
         } else if (state is UpdateCartLoaded) {
           FlushbarHelper.createSuccess(message: state.statusEntity.message)
               .show(context);
+          CartBloc.get(context).add(GetCartsDataEvent());
         } else if (state is AddOrRemoveCartLoaded) {
           CartBloc.get(context).add(GetCartsDataEvent());
         }

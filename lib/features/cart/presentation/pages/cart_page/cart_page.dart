@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../../core/resources/color_manager.dart';
 import '../../../../../core/resources/strings_manager.dart';
 import '../../../../../core/resources/values_manager.dart';
@@ -8,19 +7,8 @@ import '../../../../login/presentation/widgets/custom_button.dart';
 import '../../bloc/cart_bloc.dart';
 import '../../widgets/cart_item_builder.dart';
 
-class CartPage extends StatefulWidget {
+class CartPage extends StatelessWidget {
   const CartPage({super.key});
-
-  @override
-  State<CartPage> createState() => _CartPageState();
-}
-
-class _CartPageState extends State<CartPage> {
-  @override
-  void initState() {
-    BlocProvider.of<CartBloc>(context).add(GetCartsDataEvent());
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

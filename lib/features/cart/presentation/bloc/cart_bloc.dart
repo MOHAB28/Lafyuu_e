@@ -31,7 +31,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       final successOrFailure = await _addOrRemoveCartUsecase(event.id);
       successOrFailure.fold(
         (failure) {
-          debugPrint(failure.error);
+          debugPrint(failure.message);
           emit(AddOrRemoveCartFailure());
         },
         (data) {

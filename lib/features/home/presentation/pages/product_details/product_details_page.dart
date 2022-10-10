@@ -134,6 +134,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         FlushbarHelper.createSuccess(
                                 message: state.statusEntity.message)
                             .show(context);
+
+                        CartBloc.get(context).add(GetCartsDataEvent());
                       }
                     },
                     builder: (context, state) {
