@@ -13,7 +13,10 @@ class GetProfileDataLoading extends ProfileState {}
 
 class GetProfileDataSuccess extends ProfileState {}
 
-class GetProfileDataFailure extends ProfileState {}
+class GetProfileDataFailure extends ProfileState {
+  final PrimaryServerException exception;
+  const GetProfileDataFailure(this.exception);
+}
 
 class UpdataProfileLoading extends ProfileState {}
 

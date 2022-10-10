@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lafyuu/features/profile/presentation/pages/update_profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../../home/presentation/widgets/failure_handler_item_builder.dart';
+import 'update_profile_page.dart';
 import '../../../../core/resources/color_manager.dart';
 import '../../../../core/resources/routes_manager.dart';
 import '../../../../core/resources/strings_manager.dart';
@@ -35,23 +35,46 @@ class _ProfilePageState extends State<ProfilePage> {
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.all(AppPadding.p16),
       child: BlocBuilder<ProfileBloc, ProfileState>(
-        builder: (context, snapshot) {
+        builder: (context, state) {
           var bloc = ProfileBloc.get(context);
-          return bloc.authData != null
-              ? bloc.authData!.status == false
-                  ? SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: Center(
-                        child: Text(bloc.authData!.message),
-                      ),
-                    )
-                  : _getContentWidget(bloc.authData!)
-              : SizedBox(
+          if (state is GetProfileDataLoading) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else if (state is GetProfileDataSuccess) {
+            if (bloc.authData != null) {
+              if (bloc.authData!.status == false) {
+                return SizedBox(
                   height: MediaQuery.of(context).size.height,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
+                  child: Center(
+                    child: Text(bloc.authData!.message),
                   ),
                 );
+              } else {
+                return _getContentWidget(bloc.authData!);
+              }
+            }
+          } else if (state is GetProfileDataFailure) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 2,
+              child: FailureHandlerItemBuilder(
+                title: state.exception.error,
+                message: state.exception.message,
+                onTap: () {
+                  ProfileBloc.get(context).add(GetProfileDataEvent());
+                },
+              ),
+            );
+          }
+          return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         },
       ),
     );

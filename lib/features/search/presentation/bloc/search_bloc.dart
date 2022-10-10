@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/error/exception.dart';
 import '../../domain/entities/search_entity.dart';
 import '../../domain/usecases/search_usecase.dart';
 part 'search_event.dart';
@@ -17,7 +18,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       successOrFailure.fold(
         (failure) {
           debugPrint(failure.message);
-          emit(SearchFailure());
+          emit(SearchFailure(failure));
         },
         (data) {
           searchEntity = data;

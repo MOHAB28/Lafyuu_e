@@ -13,4 +13,7 @@ class SearchLoading extends SearchState {}
 
 class SearchLoaded extends SearchState {}
 
-class SearchFailure extends SearchState {}
+class SearchFailure extends SearchState {
+  final PrimaryServerException exception;
+  const SearchFailure(this.exception);
+}

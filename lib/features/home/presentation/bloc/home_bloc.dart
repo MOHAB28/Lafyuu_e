@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lafyuu/core/error/exception.dart';
 import '../../../../core/usecase/usecase.dart';
 import '../../domain/entities/home_entity.dart';
 import '../../domain/usecases/home_usecase.dart';
@@ -19,7 +20,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(HomeLoading());
       final successOrFailure = await _usecase(NoParams());
       successOrFailure.fold(
-        (failure) => emit(HomeFailure()),
+        (failure) => emit(HomeFailure(failure)),
         (data) {
           homeData = data;
           for (var element in data.homeData.products) {

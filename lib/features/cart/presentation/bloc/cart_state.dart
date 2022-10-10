@@ -34,10 +34,15 @@ class GetCartsLoaded extends CartState {
   const GetCartsLoaded(this.cartEntity);
 }
 
-class GetCartsFailure extends CartState {}
+class GetCartsFailure extends CartState {
+  final PrimaryServerException exception;
+  const GetCartsFailure(this.exception);
+}
 
 class InitIncreaseQuantityState extends CartState {}
+
 class IncreaseQuantityState extends CartState {}
 
 class InitDecreaseQuantityState extends CartState {}
+
 class DecreaseQuantityState extends CartState {}

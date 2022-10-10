@@ -2,6 +2,7 @@ import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/resources/values_manager.dart';
+import '../../../home/presentation/widgets/failure_handler_item_builder.dart';
 import '../../../home/presentation/widgets/product_item_builder.dart';
 import '../bloc/favourite_bloc.dart';
 import '../../../../core/resources/strings_manager.dart';
@@ -90,6 +91,17 @@ class _AllFavProductPageState extends State<AllFavProductPage> {
                 );
               }
             }
+          } else if (state is GetAllFavFailure) {
+            return Padding(
+              padding: const EdgeInsets.all(AppPadding.p16),
+              child: FailureHandlerItemBuilder(
+                message: state.exception.message,
+                title: state.exception.error,
+                onTap: () {
+                  FavouriteBloc.get(context).add(GetAllFavoureitesEvent());
+                },
+              ),
+            );
           }
           return Center(
             child: Text(

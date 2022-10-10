@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/resources/values_manager.dart';
 import '../../../../domain/entities/home_entity.dart';
 import '../../../bloc/home_bloc.dart';
+import '../../../widgets/failure_handler_item_builder.dart';
 import '../../../widgets/product_item_builder.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,9 +24,24 @@ class _HomePageState extends State<HomePage> {
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             var bloc = HomeBloc.get(context);
-            return bloc.homeData != null
-                ? _getContentWidget(bloc.homeData!)
-                : const Center(child: CircularProgressIndicator());
+            if (state is HomeLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is HomeLoaded) {
+              if (bloc.homeData != null) {
+                return _getContentWidget(bloc.homeData!);
+              }
+            } else if (state is HomeFailure) {
+              return FailureHandlerItemBuilder(
+                message: state.exception.message,
+                title: state.exception.error,
+                onTap: () {
+                  HomeBloc.get(context).add(GetHomeDataEvent());
+                },
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           },
         ),
       ),

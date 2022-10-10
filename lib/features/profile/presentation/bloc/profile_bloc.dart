@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lafyuu/core/error/exception.dart';
 import 'package:lafyuu/features/register/domain/usecases/register_usecase.dart';
 import '../../../login/domain/entities/login_entity.dart';
 import '../../../../core/usecase/usecase.dart';
@@ -20,7 +21,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(GetProfileDataLoading());
       final successOrFailure = await _getProfileDataUsecase(NoParams());
       successOrFailure.fold(
-        (failure) => emit(GetProfileDataFailure()),
+        (failure) => emit(GetProfileDataFailure(failure)),
         (data) {
           authData = data;
           emit(GetProfileDataSuccess());

@@ -23,6 +23,7 @@ class AppStrings {
   static const String haveAnAccount = 'have an account? ';
   static const String donothaveAnAccount = 'Don\'t have an account? ';
   static const String register = 'Register';
+  static const String tryAgian= 'Try Again';
   static const String forgotPassword = 'Forgot Password?';
   static const String invalidEmail = 'Please enter a valid email!';
   static const String nameInvalid = 'Your name must be not empty and greater than 8 characters!';

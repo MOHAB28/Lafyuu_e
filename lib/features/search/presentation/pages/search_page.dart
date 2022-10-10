@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/resources/color_manager.dart';
 import '../../../../core/resources/strings_manager.dart';
 import '../../../../core/resources/values_manager.dart';
+import '../../../home/presentation/widgets/failure_handler_item_builder.dart';
 import '../bloc/search_bloc.dart';
 import '../widgets/cutsom_sized_box_builder.dart';
 import '../widgets/search_item_builder.dart';
@@ -91,6 +92,15 @@ class SearchPage extends StatelessWidget {
                       ),
                     ],
                   ]
+                ] else if (state is SearchFailure) ...[
+                  FailureHandlerItemBuilder(
+                    message: state.exception.message,
+                    title: state.exception.error,
+                    onTap: () {
+                      SearchBloc.get(context).add(
+                          UserWantsToSearch(_searchController.text.trim()));
+                    },
+                  ),
                 ],
                 if (_searchController.text.isEmpty) ...[
                   CustomSizedBoxBuilder(

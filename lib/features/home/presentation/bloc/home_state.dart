@@ -13,7 +13,10 @@ class HomeLoading extends HomeState {}
 
 class HomeLoaded extends HomeState {}
 
-class HomeFailure extends HomeState {}
+class HomeFailure extends HomeState {
+  final PrimaryServerException exception;
+  const HomeFailure(this.exception);
+}
 
 class ChangeFavoritesState extends HomeState {}
 

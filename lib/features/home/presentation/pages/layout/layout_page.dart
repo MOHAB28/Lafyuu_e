@@ -47,62 +47,70 @@ class _LayoutPageState extends State<LayoutPage> {
             ],
           ),
           body: cubit.screens[cubit.currentIndex],
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: BlocBuilder<CartBloc, CartState>(
-            builder: (context, state) {
-              return Container(
-                height: AppSize.s20,
-                width: AppSize.s20,
-                margin: const EdgeInsets.only(left: AppMargin.m18,top: AppMargin.m16),
-                decoration: const BoxDecoration(
-                  color: ColorManager.red,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(
-                    CartBloc.get(context).cartEntity != null
-                        ? '${CartBloc.get(context).cartEntity!.cartData.cartItemData.length}'
-                        : '0',
-                    style: getSemiBoldStyle(
-                      color: ColorManager.white,
-                      fontSize: FontSize.s10,
-                    ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          // floatingActionButton:
+          bottomNavigationBar: Stack(
+            children: [
+              BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                currentIndex: cubit.currentIndex,
+                onTap: (index) {
+                  cubit.changeCurrentIndex(index);
+                },
+                items: const [
+                  BottomNavigationBarItem(
+                    label: 'Home',
+                    tooltip: 'Home',
+                    icon: Icon(Icons.home_outlined),
                   ),
-                ),
-              );
-            },
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: cubit.currentIndex,
-            onTap: (index) {
-              cubit.changeCurrentIndex(index);
-            },
-            items: const [
-              BottomNavigationBarItem(
-                label: 'Home',
-                tooltip: 'Home',
-                icon: Icon(Icons.home_outlined),
+                  BottomNavigationBarItem(
+                    label: 'Explore',
+                    tooltip: 'Explore',
+                    icon: Icon(Icons.search),
+                  ),
+                  BottomNavigationBarItem(
+                    label: 'Cart',
+                    tooltip: 'Cart',
+                    icon: Icon(Icons.shopping_cart_outlined),
+                  ),
+                  BottomNavigationBarItem(
+                    label: 'Offer',
+                    tooltip: 'Offer',
+                    icon: Icon(Icons.local_offer_outlined),
+                  ),
+                  BottomNavigationBarItem(
+                    label: 'Account',
+                    tooltip: 'Account',
+                    icon: Icon(Icons.person_outline_rounded),
+                  ),
+                ],
               ),
-              BottomNavigationBarItem(
-                label: 'Explore',
-                tooltip: 'Explore',
-                icon: Icon(Icons.search),
-              ),
-              BottomNavigationBarItem(
-                label: 'Cart',
-                tooltip: 'Cart',
-                icon: Icon(Icons.shopping_cart_outlined),
-              ),
-              BottomNavigationBarItem(
-                label: 'Offer',
-                tooltip: 'Offer',
-                icon: Icon(Icons.local_offer_outlined),
-              ),
-              BottomNavigationBarItem(
-                label: 'Account',
-                tooltip: 'Account',
-                icon: Icon(Icons.person_outline_rounded),
+              BlocBuilder<CartBloc, CartState>(
+                builder: (context, state) {
+                  return Positioned(
+                    right: 180.0,
+                    child: Container(
+                      height: AppSize.s20,
+                      width: AppSize.s20,
+                      decoration: const BoxDecoration(
+                        color: ColorManager.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          CartBloc.get(context).cartEntity != null
+                              ? '${CartBloc.get(context).cartEntity!.cartData.cartItemData.length}'
+                              : '0',
+                          style: getSemiBoldStyle(
+                            color: ColorManager.white,
+                            fontSize: FontSize.s10,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),

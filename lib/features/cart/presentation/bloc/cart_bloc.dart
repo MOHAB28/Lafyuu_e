@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lafyuu/core/error/exception.dart';
 import '../../../../core/usecase/usecase.dart';
 import '../../domain/usecases/add_or_remove_cart.dart';
 import '../../domain/usecases/get_carts_usecase.dart';
@@ -46,7 +47,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       successOrFailure.fold(
         (failure) {
           debugPrint('Mohab ${failure.error}');
-          emit(GetCartsFailure());
+          emit(GetCartsFailure(failure));
         },
         (data) {
           for (var element in data.cartData.cartItemData) {
