@@ -12,9 +12,13 @@ class GetHomeDataEvent extends HomeEvent {}
 class ChangeFavEvent extends HomeEvent {
   final int id;
   const ChangeFavEvent(this.id);
+  @override
+  List<Object> get props => [id];
 }
 
 class ChangeCartEvent extends HomeEvent {
   final int id;
   const ChangeCartEvent(this.id);
+  @override
+  List<Object> get props => [id];
 }
