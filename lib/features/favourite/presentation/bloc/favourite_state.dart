@@ -7,9 +7,19 @@ abstract class FavouriteState extends Equatable {
   List<Object> get props => [];
 }
 
-class FavouriteInitial extends FavouriteState {}
+class FavouriteInitial extends FavouriteState {
+  const FavouriteInitial();
 
-class GetAllFavLoading extends FavouriteState {}
+  @override
+  List<Object> get props => [];
+}
+
+class GetAllFavLoading extends FavouriteState {
+  const GetAllFavLoading();
+
+  @override
+  List<Object> get props => [];
+}
 
 class GetAllFavFailure extends FavouriteState {
   final PrimaryServerException exception;
@@ -25,13 +35,9 @@ class GetAllFavSuccess extends FavouriteState {
   List<Object> get props => [products];
 }
 
-class AddOrRemoveFavLoading extends FavouriteState {}
+class AddOrRemoveFavLoading extends FavouriteState {
+  const AddOrRemoveFavLoading();
 
-class AddOrRemoveFavFailure extends FavouriteState {}
-
-class AddOrRemoveFavSuccess extends FavouriteState {
-  final StatusEntity data;
-  const AddOrRemoveFavSuccess(this.data);
   @override
-  List<Object> get props => [data];
+  List<Object> get props => [];
 }

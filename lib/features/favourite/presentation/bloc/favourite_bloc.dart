@@ -18,14 +18,14 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
   FavouriteBloc(
     this._getAllFavouritesUsecase,
     this._removeFavUsecsae,
-  ) : super(FavouriteInitial()) {
+  ) : super(const FavouriteInitial()) {
     on<GetAllFavoureitesEvent>(_getAllFavourites);
     on<AddOrRemoveFavsEvent>(_addOrRemoveItem);
   }
 
   FutureOr<void> _getAllFavourites(
       GetAllFavoureitesEvent event, Emitter<FavouriteState> emit) async {
-    emit(GetAllFavLoading());
+    emit(const GetAllFavLoading());
     final successOrFailure = await _getAllFavouritesUsecase(NoParams());
     successOrFailure.fold(
       (failure) {

@@ -15,7 +15,6 @@ class AllFavProductPage extends StatefulWidget {
 }
 
 class _AllFavProductPageState extends State<AllFavProductPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,15 +22,9 @@ class _AllFavProductPageState extends State<AllFavProductPage> {
         title: const Text(AppStrings.favoriteProduct),
       ),
       body: BlocConsumer<FavouriteBloc, FavouriteState>(
-        listener: (context, state) {
-          if (state is AddOrRemoveFavSuccess) {
-            BlocProvider.of<FavouriteBloc>(context)
-                .add(GetAllFavoureitesEvent());
-          }
-        },
+        listener: (context, state) {},
         buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
-          
           debugPrint('Favourite Bloc Tracker');
           if (state is GetAllFavLoading) {
             debugPrint('Favourite Bloc Tracker --> GetAllFavLoading');
