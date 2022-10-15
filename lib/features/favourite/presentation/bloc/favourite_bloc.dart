@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,36 +15,44 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
   final GetAllFavouritesUsecase _getAllFavouritesUsecase;
   final AddOrRemoveFavUsecsae _removeFavUsecsae;
   static FavouriteBloc get(BuildContext context) => BlocProvider.of(context);
-  FavouriteEntity? favouriteEntity;
-  StatusEntity? statusEntity;
   FavouriteBloc(
     this._getAllFavouritesUsecase,
     this._removeFavUsecsae,
   ) : super(FavouriteInitial()) {
-    on<GetAllFavoureitesEvent>((event, emit) async {
-      emit(GetAllFavLoading());
-      final successOrFailure = await _getAllFavouritesUsecase(NoParams());
+    on<GetAllFavoureitesEvent>(_getAllFavourites);
+    on<AddOrRemoveFavsEvent>(_addOrRemoveItem);
+  }
+
+  FutureOr<void> _getAllFavourites(
+      GetAllFavoureitesEvent event, Emitter<FavouriteState> emit) async {
+    emit(GetAllFavLoading());
+    final successOrFailure = await _getAllFavouritesUsecase(NoParams());
+    successOrFailure.fold(
+      (failure) {
+        debugPrint(failure.message);
+        emit(GetAllFavFailure(failure));
+      },
+      (data) {
+        emit(GetAllFavSuccess([...data.favProductsEntity.products]));
+      },
+    );
+  }
+
+  FutureOr<void> _addOrRemoveItem(
+      AddOrRemoveFavsEvent event, Emitter<FavouriteState> emit) async {
+    final state = this.state;
+    if (state is GetAllFavSuccess) {
+      final successOrFailure = await _removeFavUsecsae(event.item.id);
       successOrFailure.fold(
-        (failure) {
-          debugPrint(failure.message);
-          emit(GetAllFavFailure(failure));
-        },
+        (failure) => emit(GetAllFavFailure(failure)),
         (data) {
-          favouriteEntity = data;
-          emit(GetAllFavSuccess());
+          emit(
+            state.products.contains(event.item)
+                ? GetAllFavSuccess([...state.products]..remove(event.item))
+                : GetAllFavSuccess([...state.products, event.item]),
+          );
         },
       );
-    });
-    on<AddOrRemoveFavsEvent>((event, emit) async {
-      emit(AddOrRemoveFavLoading());
-      final successOrFailure = await _removeFavUsecsae(event.id);
-      successOrFailure.fold(
-        (failure) => emit(AddOrRemoveFavFailure()),
-        (data) {
-          statusEntity = data;
-          emit(AddOrRemoveFavSuccess(data));
-        },
-      );
-    });
+    }
   }
 }

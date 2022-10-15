@@ -22,26 +22,33 @@ class _HomePageState extends State<HomePage> {
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(AppPadding.p16),
         child: BlocBuilder<HomeBloc, HomeState>(
+          buildWhen: (previous, current) => previous.status != current.status,
           builder: (context, state) {
-            var bloc = HomeBloc.get(context);
-            if (state is HomeLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is HomeLoaded) {
-              if (bloc.homeData != null) {
-                return _getContentWidget(bloc.homeData!);
-              }
-            } else if (state is HomeFailure) {
-              return FailureHandlerItemBuilder(
-                message: state.exception.message,
-                title: state.exception.error,
-                onTap: () {
-                  HomeBloc.get(context).add(GetHomeDataEvent());
-                },
-              );
+            switch (state.status) {
+              case RequestState.loading:
+                debugPrint('Home Bloc Tracker --> RequestState.loading');
+                return const Center(child: CircularProgressIndicator());
+              case RequestState.success:
+                debugPrint('Home Bloc Tracker --> RequestState.success');
+                if (state.homeEntity != null) {
+                  debugPrint(
+                      'Home Bloc Tracker --> RequestState.success state.homeEntity != null');
+                  return _getContentWidget(state.homeEntity!);
+                } else {
+                  debugPrint(
+                      'Home Bloc Tracker --> RequestState.success state.homeEntity == null');
+                  return const Center(child: CircularProgressIndicator());
+                }
+              case RequestState.error:
+                debugPrint('Home Bloc Tracker --> RequestState.errir');
+                return FailureHandlerItemBuilder(
+                  message: state.message,
+                  title: state.error,
+                  onTap: () {
+                    HomeBloc.get(context).add(GetHomeDataEvent());
+                  },
+                );
             }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
           },
         ),
       ),

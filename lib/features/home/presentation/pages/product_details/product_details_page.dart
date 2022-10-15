@@ -4,10 +4,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lafyuu/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:lafyuu/features/favourite/presentation/bloc/favourite_bloc.dart';
-import 'package:lafyuu/features/home/presentation/bloc/home_bloc.dart';
 import '../../../../../core/resources/color_manager.dart';
 import '../../../../../core/resources/strings_manager.dart';
 import '../../../../../core/resources/values_manager.dart';
+import '../../../../favourite/domain/entities/favourite_entity.dart';
 import '../../../../login/presentation/widgets/custom_button.dart';
 import '../../../domain/entities/home_entity.dart';
 
@@ -22,6 +22,16 @@ class ProductDetailsPage extends StatefulWidget {
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   @override
   Widget build(BuildContext context) {
+    FavouriteProductEntity favProduct = FavouriteProductEntity(
+      description: widget.productsEntity.description,
+      discount: widget.productsEntity.discount,
+      id: widget.productsEntity.id,
+      image: widget.productsEntity.image,
+      name: widget.productsEntity.name,
+      oldPrice: widget.productsEntity.oldPrice,
+      price: widget.productsEntity.price,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -68,40 +78,32 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         ),
                       ),
                       Flexible(
-                        child: BlocConsumer<FavouriteBloc, FavouriteState>(
-                          listener: (context, state) {
-                            if (state is AddOrRemoveFavFailure) {
-                              BlocProvider.of<HomeBloc>(context).add(
-                                  ChangeFavEvent(widget.productsEntity.id));
-                            } else if (state is AddOrRemoveFavSuccess) {
-                              FlushbarHelper.createSuccess(
-                                      message: state.data.message)
-                                  .show(context);
-                            }
-                          },
+                        child: BlocBuilder<FavouriteBloc, FavouriteState>(
                           builder: (context, state) {
-                            return IconButton(
-                              onPressed: () {
-                                BlocProvider.of<HomeBloc>(context).add(
-                                    ChangeFavEvent(widget.productsEntity.id));
-                                BlocProvider.of<FavouriteBloc>(context).add(
-                                    AddOrRemoveFavsEvent(
-                                        widget.productsEntity.id));
-                              },
-                              icon: HomeBloc.get(context).favorties[
-                                          widget.productsEntity.id] ==
-                                      true
-                                  ? const Icon(
-                                      Icons.favorite,
-                                      size: AppSize.s35,
-                                      color: ColorManager.red,
-                                    )
-                                  : const Icon(
-                                      Icons.favorite_outline,
-                                      size: AppSize.s35,
-                                      color: ColorManager.grey,
-                                    ),
-                            );
+                            if (state is GetAllFavLoading) {
+                              return const CircularProgressIndicator();
+                            } else if (state is GetAllFavSuccess) {
+                              final isInFav =
+                                  state.products.contains(favProduct);
+                              return IconButton(
+                                onPressed: () {
+                                  BlocProvider.of<FavouriteBloc>(context)
+                                      .add(AddOrRemoveFavsEvent(favProduct));
+                                },
+                                icon: isInFav
+                                    ? const Icon(
+                                        Icons.favorite,
+                                        size: AppSize.s35,
+                                        color: ColorManager.red,
+                                      )
+                                    : const Icon(
+                                        Icons.favorite_outline,
+                                        size: AppSize.s35,
+                                        color: ColorManager.grey,
+                                      ),
+                              );
+                            }
+                            return const Text(AppStrings.cacheError);
                           },
                         ),
                       )
@@ -125,35 +127,35 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
                   const SizedBox(height: AppSize.s16),
-                  BlocConsumer<CartBloc, CartState>(
-                    listener: (context, state) {
-                      if (state is AddOrRemoveCartFailure) {
-                        BlocProvider.of<HomeBloc>(context)
-                            .add(ChangeFavEvent(widget.productsEntity.id));
-                      } else if (state is AddOrRemoveCartLoaded) {
-                        FlushbarHelper.createSuccess(
-                                message: state.statusEntity.message)
-                            .show(context);
+                  // BlocConsumer<CartBloc, CartState>(
+                  //   listener: (context, state) {
+                  //     if (state is AddOrRemoveCartFailure) {
+                  //       // BlocProvider.of<HomeBloc>(context)
+                  //       //     .add(ChangeFavEvent(widget.productsEntity.id));
+                  //     } else if (state is AddOrRemoveCartLoaded) {
+                  //       FlushbarHelper.createSuccess(
+                  //               message: state.statusEntity.message)
+                  //           .show(context);
 
-                        CartBloc.get(context).add(GetCartsDataEvent());
-                      }
-                    },
-                    builder: (context, state) {
-                      return CustomButtonBuilder(
-                        onTap: () {
-                          BlocProvider.of<HomeBloc>(context)
-                              .add(ChangeCartEvent(widget.productsEntity.id));
-                          BlocProvider.of<CartBloc>(context).add(
-                              AddOrRemoveCartEvent(widget.productsEntity.id));
-                        },
-                        title: HomeBloc.get(context)
-                                    .carts[widget.productsEntity.id] ==
-                                true
-                            ? AppStrings.removeToCart
-                            : AppStrings.addToCart,
-                      );
-                    },
-                  ),
+                  //       CartBloc.get(context).add(GetCartsDataEvent());
+                  //     }
+                  //   },
+                  //   builder: (context, state) {
+                  //     return CustomButtonBuilder(
+                  //       onTap: () {
+                  //         // BlocProvider.of<HomeBloc>(context)
+                  //         //     .add(ChangeCartEvent(widget.productsEntity.id));
+                  //         BlocProvider.of<CartBloc>(context).add(
+                  //             AddOrRemoveCartEvent(widget.productsEntity.id));
+                  //       },
+                  //       title: // -----------------------------------
+                  //           AppStrings.addToCart,
+                  //       // true
+                  //       //     ? AppStrings.removeToCart
+                  //       //     : AppStrings.addToCart,
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ),

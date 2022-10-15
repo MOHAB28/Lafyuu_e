@@ -6,6 +6,7 @@ import '../../../../../core/resources/values_manager.dart';
 import '../../../../../core/resources/color_manager.dart';
 import '../../../../../core/resources/routes_manager.dart';
 import '../../../../cart/presentation/bloc/cart_bloc.dart';
+import '../../../../favourite/presentation/bloc/favourite_bloc.dart';
 import '../../bloc/bottom_nav_cubit/bottom_nav_cubit.dart';
 import '../../bloc/home_bloc.dart';
 
@@ -20,6 +21,7 @@ class _LayoutPageState extends State<LayoutPage> {
   void _blind() {
     BlocProvider.of<HomeBloc>(context).add(GetHomeDataEvent());
     BlocProvider.of<CartBloc>(context).add(GetCartsDataEvent());
+    BlocProvider.of<FavouriteBloc>(context).add(GetAllFavoureitesEvent());
   }
 
   @override
