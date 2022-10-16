@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/resources/color_manager.dart';
 import '../../../../core/resources/values_manager.dart';
 import '../../domain/entities/home_entity.dart';
-import '../pages/product_details/product_details_page.dart';
+import '../../../product_details/presentation/pages/product_details/product_details_page.dart';
 
 class ProductItemBuilder extends StatelessWidget {
   const ProductItemBuilder({

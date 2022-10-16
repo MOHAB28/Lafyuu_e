@@ -8,6 +8,7 @@ import 'features/favourite/presentation/bloc/favourite_bloc.dart';
 import 'features/home/presentation/bloc/bottom_nav_cubit/bottom_nav_cubit.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/login/presentation/bloc/login_bloc.dart';
+import 'features/product_details/presentation/bloc/product_details_bloc.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/register/presentation/bloc/register_bloc.dart';
 import 'features/search/presentation/bloc/search_bloc.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<ProfileBloc>()),
         BlocProvider(create: (_) => sl<FavouriteBloc>()),
         BlocProvider(create: (_) => sl<CartBloc>()),
+        BlocProvider(create: (_) => sl<ProductDetailsBloc>()),
         BlocProvider(create: (_) => sl<SearchBloc>()),
       ],
       child: MaterialApp(

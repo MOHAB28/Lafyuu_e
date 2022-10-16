@@ -10,6 +10,8 @@ abstract class FavouriteEvent extends Equatable {
 class GetAllFavoureitesEvent extends FavouriteEvent {}
 
 class AddOrRemoveFavsEvent extends FavouriteEvent {
-  final int id;
-  const AddOrRemoveFavsEvent(this.id);
+  final FavouriteProductEntity item;
+  const AddOrRemoveFavsEvent(this.item);
+  @override
+  List<Object> get props => [item];  
 }
