@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/resources/color_manager.dart';
 import '../../../../core/resources/values_manager.dart';
+import '../../../favourite/domain/entities/favourite_entity.dart';
+import '../../../favourite/presentation/bloc/favourite_bloc.dart';
 import '../../domain/entities/home_entity.dart';
 import '../../../product_details/presentation/pages/product_details/product_details_page.dart';
 
@@ -14,6 +17,9 @@ class ProductItemBuilder extends StatelessWidget {
     required this.oldPrice,
     required this.price,
     this.product,
+    this.id,
+    this.description,
+    required this.index,
     this.showRemoveFromLikesButton = false,
     this.onPressed,
   }) : super(key: key);
@@ -21,6 +27,9 @@ class ProductItemBuilder extends StatelessWidget {
   final String image;
   final String name;
   final dynamic price;
+  final int? id;
+  final int index;
+  final String? description;
   final dynamic oldPrice;
   final dynamic discount;
   final ProductsEntity? product;
@@ -98,15 +107,50 @@ class ProductItemBuilder extends StatelessWidget {
                   ),
                   if (showRemoveFromLikesButton) ...[
                     const SizedBox(width: AppSize.s8),
-                    IconButton(
-                      onPressed: () {
-                        onPressed!();
+                    BlocConsumer<FavouriteBloc, FavouriteState>(
+                      listener: (context, state) {
+                        if (state is AddOrRemoveFavLoading) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => const Dialog(
+                              backgroundColor: ColorManager.white,
+                              elevation: 0.3,
+                              child: Padding(
+                                padding: EdgeInsets.all(AppPadding.p20),
+                                child: SizedBox(
+                                  height: AppSize.s30,
+                                  width: AppSize.s30,
+                                  child: Center(child: CircularProgressIndicator()),
+                                ),
+                              ),
+                            ),
+                          );
+                        } else if (state is AddOrRemoveFavSuccess) {
+                          dismissDialog(context);
+                        }
                       },
-                      icon: const Icon(
-                        Icons.delete_outlined,
-                        size: AppSize.s25,
-                        color: ColorManager.grey,
-                      ),
+                      builder: (context, state) {
+                        return IconButton(
+                          onPressed: () {
+                            BlocProvider.of<FavouriteBloc>(context).add(
+                              AddOrRemoveFavsEvent(FavouriteProductEntity(
+                                description: description!,
+                                discount: discount,
+                                id: id!,
+                                image: image,
+                                name: name,
+                                oldPrice: oldPrice,
+                                price: price,
+                              )),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.delete_outlined,
+                            size: AppSize.s25,
+                            color: ColorManager.grey,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ],
@@ -116,5 +160,14 @@ class ProductItemBuilder extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool _isCurrentDialogShowing(BuildContext context) =>
+      ModalRoute.of(context)?.isCurrent != true;
+
+  void dismissDialog(BuildContext context) {
+    if (_isCurrentDialogShowing(context)) {
+      Navigator.of(context, rootNavigator: true).pop(true);
+    }
   }
 }

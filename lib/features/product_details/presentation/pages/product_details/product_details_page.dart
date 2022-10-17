@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/resources/color_manager.dart';
-import '../../../../../core/resources/strings_manager.dart';
 import '../../../../../core/resources/values_manager.dart';
 import '../../../../favourite/domain/entities/favourite_entity.dart';
 import '../../../../favourite/presentation/bloc/favourite_bloc.dart';
@@ -98,29 +97,23 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             Flexible(
                               child: BlocBuilder<FavouriteBloc, FavouriteState>(
                                 builder: (context, favState) {
-                                  if (favState is GetAllFavLoading) {
+                                  if (favState is AddOrRemoveFavLoading) {
                                     return const CircularProgressIndicator();
-                                  } else if (favState is GetAllFavSuccess) {
-                                    final isInFav =
-                                        favState.products.contains(favProduct);
-                                    debugPrint('isInFav --> $isInFav');
-                                    return IconButton(
-                                      onPressed: () {
-                                        BlocProvider.of<FavouriteBloc>(context)
-                                            .add(
-                                          AddOrRemoveFavsEvent(favProduct),
-                                        );
-                                      },
-                                      icon: isInFav == false
-                                          ? state.product.inFav
-                                              ? const Favourite()
-                                              : const UnFavourite()
-                                          : isInFav
-                                              ? const Favourite()
-                                              : const UnFavourite(),
-                                    );
                                   }
-                                  return const Text(AppStrings.cacheError);
+                                  return IconButton(
+                                    onPressed: () {
+                                      BlocProvider.of<FavouriteBloc>(context)
+                                          .add(
+                                        AddOrRemoveFavsEvent(favProduct),
+                                      );
+                                    },
+                                    icon: FavouriteBloc.get(context)
+                                            .urFavs
+                                            .containsKey(
+                                                widget.productsEntity.id)
+                                        ? const Favourite()
+                                        : const UnFavourite(),
+                                  );
                                 },
                               ),
                             )
