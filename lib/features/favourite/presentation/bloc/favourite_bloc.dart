@@ -15,6 +15,7 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
   final GetAllFavouritesUsecase _getAllFavouritesUsecase;
   final AddOrRemoveFavUsecsae _removeFavUsecsae;
   static FavouriteBloc get(BuildContext context) => BlocProvider.of(context);
+  Map<int, FavouriteProductEntity> urFavs = {};
   FavouriteBloc(
     this._getAllFavouritesUsecase,
     this._removeFavUsecsae,
@@ -33,6 +34,9 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
         emit(GetAllFavFailure(failure));
       },
       (data) {
+        for (var product in data.favProductsEntity.products) {
+          urFavs.addAll({product.id: product});
+        }
         emit(GetAllFavSuccess([...data.favProductsEntity.products]));
       },
     );
@@ -40,19 +44,16 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
 
   FutureOr<void> _addOrRemoveItem(
       AddOrRemoveFavsEvent event, Emitter<FavouriteState> emit) async {
-    final state = this.state;
-    if (state is GetAllFavSuccess) {
-      final successOrFailure = await _removeFavUsecsae(event.item.id);
-      successOrFailure.fold(
-        (failure) => emit(GetAllFavFailure(failure)),
-        (data) {
-          emit(
-            state.products.contains(event.item)
-                ? GetAllFavSuccess([...state.products]..remove(event.item))
-                : GetAllFavSuccess([...state.products, event.item]),
-          );
-        },
-      );
-    }
+    emit(const AddOrRemoveFavLoading());
+    final successOrFailure = await _removeFavUsecsae(event.item.id);
+    successOrFailure.fold(
+      (failure) => emit(AddOrRemoveFavFailure(failure.message)),
+      (data) {
+        urFavs.containsKey(event.item.id)
+            ? urFavs.remove(event.item.id)
+            : urFavs.addAll({event.item.id: event.item});
+        emit(AddOrRemoveFavSuccess(data.message));
+      },
+    );
   }
 }

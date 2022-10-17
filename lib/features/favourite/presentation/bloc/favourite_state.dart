@@ -41,3 +41,17 @@ class AddOrRemoveFavLoading extends FavouriteState {
   @override
   List<Object> get props => [];
 }
+
+class AddOrRemoveFavSuccess extends FavouriteState {
+  const AddOrRemoveFavSuccess(this.message);
+  final String message;
+  @override
+  List<Object> get props => [message];
+}
+
+class AddOrRemoveFavFailure extends FavouriteState {
+  const AddOrRemoveFavFailure(this.message);
+  final String message;
+  @override
+  List<Object> get props => [message];
+}

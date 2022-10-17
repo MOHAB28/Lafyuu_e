@@ -95,6 +95,7 @@ class HomeGridViewBuilder extends StatelessWidget {
             product: products![i],
             name: products![i].name,
             price: products![i].price,
+            index: i,
             oldPrice: products![i].oldPrice,
             discount: products![i].discount,
             image: products![i].image,

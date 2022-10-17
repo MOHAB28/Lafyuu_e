@@ -1,8 +1,6 @@
-import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/resources/values_manager.dart';
-import '../../../home/presentation/widgets/failure_handler_item_builder.dart';
 import '../../../home/presentation/widgets/product_item_builder.dart';
 import '../bloc/favourite_bloc.dart';
 import '../../../../core/resources/strings_manager.dart';
@@ -25,71 +23,35 @@ class _AllFavProductPageState extends State<AllFavProductPage> {
         listener: (context, state) {},
         buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
+          final favs = FavouriteBloc.get(context).urFavs.values.toList();
           debugPrint('Favourite Bloc Tracker');
-          if (state is GetAllFavLoading) {
-            debugPrint('Favourite Bloc Tracker --> GetAllFavLoading');
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is GetAllFavSuccess) {
-            debugPrint('Favourite Bloc Tracker --> GetAllFavSuccess');
-            if (state.products.isNotEmpty) {
-              debugPrint(
-                  'Favourite Bloc Tracker --> GetAllFavSuccess --> products.isNotEmpty');
-              return GridView.builder(
-                itemCount: state.products.length,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.all(AppPadding.p16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: AppSize.s12,
-                  crossAxisSpacing: AppSize.s12,
-                  childAspectRatio: 3 / 4.8,
-                ),
-                itemBuilder: (ctx, i) {
-                  return ProductItemBuilder(
-                    name: state.products[i].name,
-                    price: state.products[i].price,
-                    oldPrice: state.products[i].oldPrice,
-                    discount: state.products[i].discount,
-                    image: state.products[i].image,
-                    showRemoveFromLikesButton: true,
-                    onPressed: () {
-                      BlocProvider.of<FavouriteBloc>(context).add(
-                        AddOrRemoveFavsEvent(
-                          state.products[i],
-                        ),
-                      );
-                      FlushbarHelper.createLoading(
-                        message: AppStrings.loading,
-                        linearProgressIndicator:
-                            const LinearProgressIndicator(),
-                        duration: const Duration(seconds: 1),
-                      ).show(context);
-                    },
-                  );
-                },
-              );
-            } else if (state.products.isEmpty) {
-              debugPrint(
-                  'Favourite Bloc Tracker --> GetAllFavSuccess --> products.isEmpty');
-              Center(
-                child: Text(
-                  AppStrings.noItems,
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-              );
-            }
-          } else if (state is GetAllFavFailure) {
-            debugPrint('Favourite Bloc Tracker --> GetAllFavFAilure');
-
-            return Padding(
+          if (favs.isNotEmpty) {
+            debugPrint(
+                'Favourite Bloc Tracker --> GetAllFavSuccess --> products.isNotEmpty');
+            return GridView.builder(
+              itemCount: favs.length,
+              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.all(AppPadding.p16),
-              child: FailureHandlerItemBuilder(
-                message: state.exception.message,
-                title: state.exception.error,
-                onTap: () {
-                  FavouriteBloc.get(context).add(GetAllFavoureitesEvent());
-                },
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: AppSize.s12,
+                crossAxisSpacing: AppSize.s12,
+                childAspectRatio: 3 / 4.8,
               ),
+              itemBuilder: (ctx, i) {
+                return ProductItemBuilder(
+                  key: ValueKey(favs[i].id),
+                  name: favs[i].name,
+                  price: favs[i].price,
+                  id: favs[i].id,
+                  index: i,
+                  description: favs[i].description,
+                  oldPrice: favs[i].oldPrice,
+                  discount: favs[i].discount,
+                  image: favs[i].image,
+                  showRemoveFromLikesButton: true,
+                );
+              },
             );
           }
           debugPrint('Favourite Bloc Tracker --> BLoc');
