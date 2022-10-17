@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/resources/color_manager.dart';
+import '../../../../../core/resources/strings_manager.dart';
 import '../../../../../core/resources/values_manager.dart';
+import '../../../../cart/presentation/bloc/cart_bloc.dart';
 import '../../../../favourite/domain/entities/favourite_entity.dart';
 import '../../../../favourite/presentation/bloc/favourite_bloc.dart';
 import '../../../../home/domain/entities/home_entity.dart';
 import '../../../../home/presentation/widgets/failure_handler_item_builder.dart';
+import '../../../../login/presentation/widgets/custom_button.dart';
 import '../../bloc/product_details_bloc.dart';
 
 class ProductDetailsPage extends StatefulWidget {
@@ -109,8 +112,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                     },
                                     icon: FavouriteBloc.get(context)
                                             .urFavs
-                                            .containsKey(
-                                                widget.productsEntity.id)
+                                            .containsKey(state.product.id)
                                         ? const Favourite()
                                         : const UnFavourite(),
                                   );
@@ -137,35 +139,27 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           style: Theme.of(context).textTheme.displaySmall,
                         ),
                         const SizedBox(height: AppSize.s16),
-                        // BlocConsumer<CartBloc, CartState>(
-                        //   listener: (context, state) {
-                        //     if (state is AddOrRemoveCartFailure) {
-                        //       // BlocProvider.of<HomeBloc>(context)
-                        //       //     .add(ChangeFavEvent(widget.productsEntity.id));
-                        //     } else if (state is AddOrRemoveCartLoaded) {
-                        //       FlushbarHelper.createSuccess(
-                        //               message: state.statusEntity.message)
-                        //           .show(context);
-
-                        //       CartBloc.get(context).add(GetCartsDataEvent());
-                        //     }
-                        //   },
-                        //   builder: (context, state) {
-                        //     return CustomButtonBuilder(
-                        //       onTap: () {
-                        //         // BlocProvider.of<HomeBloc>(context)
-                        //         //     .add(ChangeCartEvent(widget.productsEntity.id));
-                        //         BlocProvider.of<CartBloc>(context).add(
-                        //             AddOrRemoveCartEvent(widget.productsEntity.id));
-                        //       },
-                        //       title: // -----------------------------------
-                        //           AppStrings.addToCart,
-                        //       // true
-                        //       //     ? AppStrings.removeToCart
-                        //       //     : AppStrings.addToCart,
-                        //     );
-                        //   },
-                        // ),
+                        BlocBuilder<CartBloc, CartState>(
+                          builder: (context, favState) {
+                            if (favState is AddOrRemoveCartLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return CustomButtonBuilder(
+                              onTap: () {
+                                BlocProvider.of<CartBloc>(context).add(
+                                  AddOrRemoveCartEvent(state.product),
+                                );
+                              },
+                              title: CartBloc.get(context)
+                                      .urCart
+                                      .containsKey(state.product.id)
+                                  ? AppStrings.removeToCart
+                                  : AppStrings.addToCart,
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),

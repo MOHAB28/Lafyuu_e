@@ -14,7 +14,7 @@ class CartsRepoImpl implements CartsRepo {
   CartsRepoImpl(this._networkInfo, this._remoteDataSources);
 
   @override
-  Future<Either<PrimaryServerException, StatusEntity>> addOrRemoveCart(
+  Future<Either<PrimaryServerException, CartItemDataEntity>> addOrRemoveCart(
       int id) async {
     if (await _networkInfo.isConnected == ConnectivityResult.wifi ||
         await _networkInfo.isConnected == ConnectivityResult.mobile) {
