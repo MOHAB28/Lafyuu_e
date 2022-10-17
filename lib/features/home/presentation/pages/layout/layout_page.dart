@@ -101,8 +101,8 @@ class _LayoutPageState extends State<LayoutPage> {
                       ),
                       child: Center(
                         child: Text(
-                          CartBloc.get(context).cartEntity != null
-                              ? '${CartBloc.get(context).cartEntity!.cartData.cartItemData.length}'
+                          CartBloc.get(context).urCart.values.isNotEmpty
+                              ? '${CartBloc.get(context).urCart.values.length}'
                               : '0',
                           style: getSemiBoldStyle(
                             color: ColorManager.white,

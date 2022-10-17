@@ -6,7 +6,7 @@ import '../../../favourite/data/models/favourite_model.dart';
 
 abstract class CartRemoteDataSources {
   Future<CartModel> getCarts();
-  Future<StatusModel> addOrRemoveCart(int id);
+  Future<CartItemDataModel> addOrRemoveCart(int id);
   Future<StatusModel> updateCart(UpdateCartInput input);
 }
 
@@ -15,7 +15,7 @@ class CartRemoteDataSourcesImpl implements CartRemoteDataSources {
   CartRemoteDataSourcesImpl(this._dioHelper);
 
   @override
-  Future<StatusModel> addOrRemoveCart(int id) async {
+  Future<CartItemDataModel> addOrRemoveCart(int id) async {
     final response = await _dioHelper.post(
       endPoint: cartsEndPoint,
       token: token ?? '',
@@ -24,7 +24,7 @@ class CartRemoteDataSourcesImpl implements CartRemoteDataSources {
       },
     );
 
-    return StatusModel.fromJson(response);
+    return CartItemDataModel.fromJson(response['data']);
   }
 
   @override

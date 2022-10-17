@@ -139,11 +139,11 @@ class ProductsModel extends ProductsEntity {
       oldPrice: json['old_price'],
       discount: json['discount'] ?? 0,
       image: json['image'],
-      name: json['name'],
-      description: json['description'],
+      name: json['name']??'',
+      description: json['description'] ?? '',
       images: images,
-      inFav: json['in_favorites'],
-      inCart: json['in_cart'],
+      inFav: json['in_favorites'] ?? false,
+      inCart: json['in_cart'] ?? false,
     );
   }
 

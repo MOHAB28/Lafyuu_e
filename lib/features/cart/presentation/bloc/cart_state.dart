@@ -7,16 +7,33 @@ abstract class CartState extends Equatable {
   List<Object> get props => [];
 }
 
-class CartInitial extends CartState {}
+class CartInitial extends CartState {
+  const CartInitial();
 
-class AddOrRemoveCartLoading extends CartState {}
-
-class AddOrRemoveCartLoaded extends CartState {
-  final StatusEntity statusEntity;
-  const AddOrRemoveCartLoaded(this.statusEntity);
+  @override
+  List<Object> get props => [];
 }
 
-class AddOrRemoveCartFailure extends CartState {}
+class AddOrRemoveCartLoading extends CartState {
+  const AddOrRemoveCartLoading();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddOrRemoveCartLoaded extends CartState {
+  const AddOrRemoveCartLoaded();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddOrRemoveCartFailure extends CartState {
+  const AddOrRemoveCartFailure();
+
+  @override
+  List<Object> get props => [];
+}
 
 class UpdateCartLoading extends CartState {}
 
@@ -27,22 +44,25 @@ class UpdateCartLoaded extends CartState {
 
 class UpdateCartFailure extends CartState {}
 
-class GetCartsLoading extends CartState {}
+class GetCartsLoading extends CartState {
+  const GetCartsLoading();
+
+  @override
+  List<Object> get props => [];
+}
 
 class GetCartsLoaded extends CartState {
   final CartEntity cartEntity;
   const GetCartsLoaded(this.cartEntity);
+
+  @override
+  List<Object> get props => [cartEntity];
 }
 
 class GetCartsFailure extends CartState {
   final PrimaryServerException exception;
   const GetCartsFailure(this.exception);
+
+  @override
+  List<Object> get props => [exception];
 }
-
-class InitIncreaseQuantityState extends CartState {}
-
-class IncreaseQuantityState extends CartState {}
-
-class InitDecreaseQuantityState extends CartState {}
-
-class DecreaseQuantityState extends CartState {}
