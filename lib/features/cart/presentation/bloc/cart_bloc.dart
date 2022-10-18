@@ -30,21 +30,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) : super(const CartInitial()) {
     on<AddOrRemoveCartEvent>(_addOrRemoveCart);
     on<GetCartsDataEvent>(_onGetCarts);
-    on<UpdateCartEvent>((event, emit) async {
-      emit(UpdateCartLoading());
-      final successOrFailure = await _updateCartUsecase(
-        UpdateCartUsecaseInput(
-          id: event.id,
-          quantity: event.quantity,
-        ),
-      );
-      successOrFailure.fold(
-        (failure) => emit(UpdateCartFailure()),
-        (data) {
-          emit(UpdateCartLoaded(data));
-        },
-      );
-    });
+    on<IncreaseQuantityItemEvent>(_onIncreaseQuantity);
+    on<DecreaseQuantityItemEvent>(_onDecreaseQuantity);
   }
 
   FutureOr<void> _onGetCarts(
@@ -62,6 +49,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         for (var cart in data.cartData.cartItemData) {
           urCart.addAll({cart.products.id: cart});
         }
+        total = data.cartData.total;
         emit(GetCartsLoaded(data));
       },
     );
@@ -73,7 +61,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     emit(const AddOrRemoveCartLoading());
     final successOrFailure = await _addOrRemoveCartUsecase(event.item.id);
-
     successOrFailure.fold(
       (failure) {
         debugPrint(failure.message);
@@ -84,15 +71,108 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             ? urCart.remove(event.item.id)
             : urCart.addAll(
                 {
-                  event.item.id: CartItemDataEntity(
-                    id: data.id,
-                    quantity: data.quantity,
-                    products: data.products,
-                  ),
+                  event.item.id: data,
                 },
               );
         emit(const AddOrRemoveCartLoaded());
       },
     );
+  }
+
+  FutureOr<void> _onIncreaseQuantity(
+    IncreaseQuantityItemEvent event,
+    Emitter<CartState> emit,
+  ) async {
+    if (urCart.containsKey(event.cartItem.products.id)) {
+      int? preQu;
+      preQu ??= urCart[event.cartItem.products.id]!.quantity;
+      emit(const IncreaseQuantityItemLoading());
+      urCart.update(
+        event.cartItem.products.id,
+        (value) => CartItemDataEntity(
+          id: event.cartItem.id,
+          products: event.cartItem.products,
+          quantity: event.cartItem.quantity + 1,
+        ),
+      );
+      debugPrint(
+          'quantity ->>>>>>>> ${urCart[event.cartItem.products.id]!.quantity}');
+      final successOrFailure = await _updateCartUsecase(
+        UpdateCartUsecaseInput(
+          id: event.cartItem.id,
+          quantity: urCart[event.cartItem.products.id]!.quantity,
+        ),
+      );
+      successOrFailure.fold(
+        (failure) {
+          urCart.update(
+            event.cartItem.products.id,
+            (value) => CartItemDataEntity(
+              id: event.cartItem.id,
+              products: event.cartItem.products,
+              quantity: preQu!,
+            ),
+          );
+          emit(const IncreaseQuantityItemFailure());
+        },
+        (data) {
+          preQu = null;
+          total = 0;
+          for (var item in urCart.values) {
+            total += (item.quantity * item.products.price);
+          }
+          emit(const IncreaseQuantityItemSuccess());
+        },
+      );
+    }
+  }
+
+  FutureOr<void> _onDecreaseQuantity(
+    DecreaseQuantityItemEvent event,
+    Emitter<CartState> emit,
+  ) async {
+    if (urCart.containsKey(event.cartItem.products.id)) {
+      int? preQu;
+      preQu ??= urCart[event.cartItem.products.id]!.quantity;
+      emit(const DecreaseQuantityItemLoading());
+      urCart.update(
+        event.cartItem.products.id,
+        (value) => CartItemDataEntity(
+          id: event.cartItem.id,
+          products: event.cartItem.products,
+          quantity:
+              event.cartItem.quantity > 1 ? event.cartItem.quantity - 1 : 1,
+        ),
+      );
+      debugPrint(
+          'quantity ->>>>>>>> ${urCart[event.cartItem.products.id]!.quantity}');
+      final successOrFailure = await _updateCartUsecase(
+        UpdateCartUsecaseInput(
+          id: event.cartItem.id,
+          quantity: urCart[event.cartItem.products.id]!.quantity,
+        ),
+      );
+      successOrFailure.fold(
+        (failure) {
+          urCart.update(
+            event.cartItem.products.id,
+            (value) => CartItemDataEntity(
+              id: event.cartItem.id,
+              products: event.cartItem.products,
+              quantity: preQu!,
+            ),
+          );
+          emit(const DecreaseQuantityItemFailure());
+        },
+        (data) {
+          preQu = null;
+          total = 0;
+          for (var item in urCart.values) {
+            total += (item.quantity * item.products.price);
+          }
+          emit(const DecreaseQuantityItemSuccess());
+        },
+      );
+    }
   }
 }

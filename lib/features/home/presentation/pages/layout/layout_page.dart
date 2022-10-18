@@ -20,7 +20,7 @@ class LayoutPage extends StatefulWidget {
 class _LayoutPageState extends State<LayoutPage> {
   void _blind() {
     BlocProvider.of<HomeBloc>(context).add(GetHomeDataEvent());
-    BlocProvider.of<CartBloc>(context).add(GetCartsDataEvent());
+    BlocProvider.of<CartBloc>(context).add(const GetCartsDataEvent());
     BlocProvider.of<FavouriteBloc>(context).add(GetAllFavoureitesEvent());
   }
 

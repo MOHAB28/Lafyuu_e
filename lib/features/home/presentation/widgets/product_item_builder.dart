@@ -7,6 +7,7 @@ import '../../../favourite/domain/entities/favourite_entity.dart';
 import '../../../favourite/presentation/bloc/favourite_bloc.dart';
 import '../../domain/entities/home_entity.dart';
 import '../../../product_details/presentation/pages/product_details/product_details_page.dart';
+import 'custom_dialog_builder.dart';
 
 class ProductItemBuilder extends StatelessWidget {
   const ProductItemBuilder({
@@ -112,18 +113,7 @@ class ProductItemBuilder extends StatelessWidget {
                         if (state is AddOrRemoveFavLoading) {
                           showDialog(
                             context: context,
-                            builder: (BuildContext context) => const Dialog(
-                              backgroundColor: ColorManager.white,
-                              elevation: 0.3,
-                              child: Padding(
-                                padding: EdgeInsets.all(AppPadding.p20),
-                                child: SizedBox(
-                                  height: AppSize.s30,
-                                  width: AppSize.s30,
-                                  child: Center(child: CircularProgressIndicator()),
-                                ),
-                              ),
-                            ),
+                            builder: (BuildContext context) => const CustomDialogBuilder(),
                           );
                         } else if (state is AddOrRemoveFavSuccess) {
                           dismissDialog(context);
@@ -171,3 +161,4 @@ class ProductItemBuilder extends StatelessWidget {
     }
   }
 }
+
