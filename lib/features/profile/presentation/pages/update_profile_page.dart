@@ -43,6 +43,8 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               if (state.authEntity.status != false) {
                 FlushbarHelper.createSuccess(message: state.authEntity.message)
                     .show(context);
+                BlocProvider.of<ProfileBloc>(context)
+                    .add(GetProfileDataEvent());
               } else {
                 FlushbarHelper.createError(message: state.authEntity.message)
                     .show(context);
