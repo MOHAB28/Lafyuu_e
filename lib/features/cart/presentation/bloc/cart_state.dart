@@ -66,3 +66,45 @@ class GetCartsFailure extends CartState {
   @override
   List<Object> get props => [exception];
 }
+
+class DecreaseQuantityItemLoading extends CartState {
+  const DecreaseQuantityItemLoading();
+
+  @override
+  List<Object> get props => [];
+}
+
+class DecreaseQuantityItemSuccess extends CartState {
+  const DecreaseQuantityItemSuccess();
+
+  @override
+  List<Object> get props => [];
+}
+
+class DecreaseQuantityItemFailure extends CartState {
+  const DecreaseQuantityItemFailure();
+
+  @override
+  List<Object> get props => [];
+}
+
+class IncreaseQuantityItemLoading extends CartState {
+  const IncreaseQuantityItemLoading();
+
+  @override
+  List<Object> get props => [];
+}
+
+class IncreaseQuantityItemSuccess extends CartState {
+  const IncreaseQuantityItemSuccess();
+
+  @override
+  List<Object> get props => [];
+}
+
+class IncreaseQuantityItemFailure extends CartState {
+  const IncreaseQuantityItemFailure();
+
+  @override
+  List<Object> get props => [];
+}

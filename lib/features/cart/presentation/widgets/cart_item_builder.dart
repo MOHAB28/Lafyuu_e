@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/resources/color_manager.dart';
 import '../../../../core/resources/values_manager.dart';
+import '../../../home/presentation/widgets/custom_dialog_builder.dart';
 import '../../domain/entities/cart_entity.dart';
 import '../bloc/cart_bloc.dart';
 
@@ -61,14 +63,27 @@ class CartItemBuillder extends StatelessWidget {
                                   ),
                           ),
                           const SizedBox(width: AppSize.s8),
-                          InkWell(
-                            onTap: () {
-                              CartBloc.get(context)
-                                  .add(AddOrRemoveCartEvent(data.products));
+                          BlocListener<CartBloc, CartState>(
+                            listener: (context, state) {
+                              if (state is AddOrRemoveCartLoading) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      const CustomDialogBuilder(),
+                                );
+                              } else if (state is AddOrRemoveCartLoaded) {
+                                dismissDialog(context);
+                              }
                             },
-                            child: const Icon(
-                              Icons.delete_outline,
-                              color: ColorManager.grey,
+                            child: InkWell(
+                              onTap: () {
+                                CartBloc.get(context)
+                                    .add(AddOrRemoveCartEvent(data.products));
+                              },
+                              child: const Icon(
+                                Icons.delete_outline,
+                                color: ColorManager.grey,
+                              ),
                             ),
                           ),
                         ],
@@ -95,7 +110,10 @@ class CartItemBuillder extends StatelessWidget {
                       child: Row(
                         children: [
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              CartBloc.get(context)
+                                  .add(DecreaseQuantityItemEvent(data));
+                            },
                             icon: const Icon(Icons.remove),
                           ),
                           Container(
@@ -109,7 +127,10 @@ class CartItemBuillder extends StatelessWidget {
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              CartBloc.get(context)
+                                  .add(IncreaseQuantityItemEvent(data));
+                            },
                             icon: const Icon(Icons.add),
                           ),
                         ],
@@ -123,5 +144,14 @@ class CartItemBuillder extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  bool _isCurrentDialogShowing(BuildContext context) =>
+      ModalRoute.of(context)?.isCurrent != true;
+
+  void dismissDialog(BuildContext context) {
+    if (_isCurrentDialogShowing(context)) {
+      Navigator.of(context, rootNavigator: true).pop(true);
+    }
   }
 }
